@@ -1,0 +1,8 @@
+.idea/
+sport/__pycache__/
+test/test_output/
+test/__pycache__/
+docs/classes.png
+docs/packages.png
+template_input.xlsx
+template_output.xlsx

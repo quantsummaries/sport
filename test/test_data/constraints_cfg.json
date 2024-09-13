@@ -1,0 +1,30 @@
+[
+  {
+    "TYPE": "LINEAR_INEQ",
+    "SEC_ID": "EACH",
+    "ATTRIBUTE": "WEIGHT",
+    "ATTRIBUTE_PARAMS": "",
+    "VALUE": "[0.0:1.0]"
+  },
+  {
+    "TYPE": "LINEAR_INEQ",
+    "SEC_ID": "300347",
+    "ATTRIBUTE": "WEIGHT",
+    "ATTRIBUTE_PARAMS": "",
+    "VALUE": "[0.0:0.3]"
+  },
+  {
+    "TYPE": "LINEAR_INEQ",
+    "SEC_ID": "002777+300502",
+    "ATTRIBUTE": "DIV_YLD",
+    "ATTRIBUTE_PARAMS": "",
+    "VALUE": "[0.03:0.1]"
+  },
+  {
+    "TYPE": "LINEAR_EQ",
+    "SEC_ID": "ALL",
+    "ATTRIBUTE": "WEIGHT",
+    "ATTRIBUTE_PARAMS": "",
+    "VALUE": 1
+  }
+]

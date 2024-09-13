@@ -1,0 +1,21 @@
+digraph "packages" {
+rankdir=BT
+charset="utf-8"
+"sport.constants" [color="black", label=<sport.constants>, shape="box", style="solid"];
+"sport.constraint" [color="black", label=<sport.constraint>, shape="box", style="solid"];
+"sport.covar_estimator" [color="black", label=<sport.covar_estimator>, shape="box", style="solid"];
+"sport.dao" [color="black", label=<sport.dao>, shape="box", style="solid"];
+"sport.functions" [color="black", label=<sport.functions>, shape="box", style="solid"];
+"sport.objective" [color="black", label=<sport.objective>, shape="box", style="solid"];
+"sport.optimizer" [color="black", label=<sport.optimizer>, shape="box", style="solid"];
+"sport.portfolio" [color="black", label=<sport.portfolio>, shape="box", style="solid"];
+"sport.security" [color="black", label=<sport.security>, shape="box", style="solid"];
+"sport.constraint" -> "sport.constants" [arrowhead="open", arrowtail="none"];
+"sport.constraint" -> "sport.functions" [arrowhead="open", arrowtail="none"];
+"sport.dao" -> "sport.constants" [arrowhead="open", arrowtail="none"];
+"sport.dao" -> "sport.security" [arrowhead="open", arrowtail="none"];
+"sport.objective" -> "sport.functions" [arrowhead="open", arrowtail="none"];
+"sport.optimizer" -> "sport.functions" [arrowhead="open", arrowtail="none"];
+"sport.portfolio" -> "sport.functions" [arrowhead="open", arrowtail="none"];
+"sport.portfolio" -> "sport.security" [arrowhead="open", arrowtail="none"];
+}
