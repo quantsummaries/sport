@@ -101,7 +101,7 @@ class CovarEstimator:
 
         return sec_id_to_last_data, sec_id_to_price
 
-    def __init__(self, data_dir: str, rtrn_method: str, halflife_in_yrs: float, cash_rtrn: float = None) -> None:
+    def __init__(self, data_dir: str, rtrn_method: str, halflife_in_yrs: float, cash_rtrn: float) -> None:
         """
         Args:
             data_dir (str): a directory which holds all the security price data.
@@ -162,6 +162,15 @@ class CovarEstimator:
                 self._covar_matrix.loc[sec_id1, sec_id2] = sum(covariance)
                 self._covar_matrix.loc[sec_id2, sec_id1] = self._covar_matrix.loc[sec_id1, sec_id2]
 
+        # generate correlation matrix based on covar matrix
+        self._corr_matrix = self._covar_matrix.copy()
+        stdvar = dict()
+        for idx in self._covar_matrix.index:
+            stdvar[idx] = math.sqrt(self._covar_matrix.loc[idx, idx])
+        for idx in self._covar_matrix.index:
+            for col in self._covar_matrix.columns:
+                self._corr_matrix.loc[idx, col] = round(self._corr_matrix.loc[idx, col]/(stdvar[idx]*stdvar[col]),6)
+
         # re-scale daily return to annualized return
         rtrn_scalar = 243
         for k in self._avg_rtrns:
@@ -177,11 +186,10 @@ class CovarEstimator:
             self._risks[sec_id] = math.sqrt(self._covar_matrix.loc[sec_id, sec_id])
 
         # add CASH as a stand-alone asset
-        if cash_rtrn is not None:
-            self._sec_id_list.append('000000')
-            self._sec_id_to_last_data['000000'] = {'SEC_NM': 'CASH'}
-            self._avg_rtrns['000000'] = cash_rtrn
-            self._risks['000000'] = 0.0
+        self._sec_id_list.append('000000')
+        self._sec_id_to_last_data['000000'] = {'SEC_NM': 'CASH'}
+        self._avg_rtrns['000000'] = cash_rtrn
+        self._risks['000000'] = 0.0
 
         new_columns = list(self._covar_matrix.columns)
         new_columns.append('000000')
@@ -206,6 +214,14 @@ class CovarEstimator:
             covar_matrix (pandas.DataFrame): a data frame of covariance matrix with index and columns being IDs.
         """
         return self._covar_matrix.copy()
+
+    def get_corr_matrix(self) -> pd.DataFrame:
+        """Return a data frame of correlation matrix.
+
+        Returns:
+            corr_matrix (pandas.DataFrame): a data frame of correlation matrix with index and columns being IDs.
+        """
+        return self._corr_matrix.copy()
 
     def get_risk(self) -> Dict[str, float]:
         """Return a dictionary of risk.

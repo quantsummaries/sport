@@ -4,7 +4,13 @@ SPORT (Scalable Portfolio Optimization Research Tool) provides a scalable archit
 
 It incorporates several optimization packages (scipy.optimize, cvxopt). It provides a flexible syntax to formulate constraints and can handle a variety of target functions, including mean-variance, Sharpe ratio, volatility, risk parity, and maximum drawdown. 
 
-Run batch_port_main.py will get a run on sample data, with printouts stored in sample_input_output.txt.
+## HOw to Run
+1. Run batch_download_data.py to download daily price data to the data folder.
+2. In the data folder, run shell scripts clean_data.sh and change_headers.sh to clean up data.
+3. Run btach_port_covar.py to load daily price data obtained in Step 1, and then generate covariance and correlation matrices.
+4. Manually update attributes_data.csv to generate sector information.
+5. Manually update template_input.xlsx to generate inputs.
+6. Run batch_port_main.py to generate optimal weights for various objectives and constraints.
 
 ## TODO
 
