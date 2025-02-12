@@ -6,8 +6,9 @@ import traceback
 import yfinance as yf
 
 if __name__ == '__main__':
+    """after downloading the data, run script clean_data.sh and change_headers.sh."""
     try:
-        data_dir = os.path.join(os.getcwd(), "data", "yfinance")
+        data_dir = os.path.join(os.getcwd(), "data", "etf")
         if not os.path.exists(data_dir):
             os.mkdir(data_dir)
 

@@ -79,8 +79,6 @@ def process_input_output(dao, uuid):
 
     if 'cn' in uuid:
         sec_id_list_input, returns_input, covar_input, objectives_input, constr_df = Dao.read_excel_input_cn(input_file_path)
-    elif 'en' in uuid:
-        sec_id_list_input, returns_input, covar_input, objectives_input, constr_df = Dao.read_excel_input_en(input_file_path)
     else:
         sec_id_list_input, returns_input, covar_input, objectives_input, constr_df = Dao.read_excel_input_en(input_file_path)
 
@@ -136,16 +134,14 @@ if __name__ == '__main__':
         pd.set_option('display.width', 400)
         pd.set_option('display.max_columns', 20)
 
+        all_uuid = {'template_cn': ['covar_matrix.csv', 'attributes_data.csv'],
+                    'template_en': ['covar_matrix.csv', 'attributes_data.csv'],
+                    'template_etf': ['etf_covar_matrix.csv', 'etf_attributes_data.csv']}
+
         # read inputs
-        #all_uuid = ["template_cn", "template_en", "template_yfinance"]
-        all_uuid = ["template_yfinance"]
-        for uuid in all_uuid:
-            if "yfinance" in uuid:
-                covar_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', 'yfinance_covar_matrix.csv')
-                attributes_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', 'yfinance_attributes_data.csv')
-            else:
-                covar_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', 'covar_matrix.csv')
-                attributes_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', 'attributes_data.csv')
+        for uuid, v in all_uuid.items():
+            covar_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', v[0])
+            attributes_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', v[1])
             dao = Dao.init_from_default_data(covar_path=covar_path, attributes_path=attributes_path)
             process_input_output(dao, uuid)
 

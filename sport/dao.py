@@ -13,14 +13,14 @@ class Dao:
 
     @staticmethod
     def read_excel_input_cn(file_path: str) -> tuple:
-        """Read inputs from an Excel file with given format.
+        """Read inputs in Chinese from an Excel file with given format.
 
         Args:
             file_path (string): file path of the Excel input file.
 
         Returns:
             sec_id_list (list): list of security IDs.
-            returns (dict): {security id: nonp-NaN return rate}.
+            returns (dict): {security id: non-NaN return rate}.
             covar (pandas.DataFrame): covariance matrix in data frame format.
             objectives (dict): {'MEAN_VARIANCE': risk_tol, 'MAX_SHARPE_RATIO': benchmark rate, others: NaN}.
             constr_df (pandas.DataFrame): a data frame of constraints.
@@ -98,14 +98,14 @@ class Dao:
 
     @staticmethod
     def read_excel_input_en(file_path: str) -> tuple:
-        """Read inputs from an Excel file with given format.
+        """Read inputs in English from an Excel file with given format.
 
         Args:
             file_path (string): file path of the Excel input file.
 
         Returns:
             sec_id_list (list): list of security IDs.
-            returns (dict): {security id: nonp-NaN return rate}.
+            returns (dict): {security id: non-NaN return rate}.
             covar (pandas.DataFrame): covariance matrix in data frame format.
             objectives (dict): {'MEAN_VARIANCE': risk_tol, 'MAX_SHARPE_RATIO': benchmark rate, others: NaN}.
             constr_df (pandas.DataFrame): a data frame of constraints.
