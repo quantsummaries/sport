@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="649pt" height="332pt" viewBox="0.00 0.00 648.66 332.00">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 328)">
+<title>packages</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-328 644.66,-328 644.66,4 -4,4"/>
+<!-- sport -->
+<g id="node1" class="node">
+<title>sport</title>
+<polygon fill="none" stroke="black" points="377.8,-36 323.8,-36 323.8,0 377.8,0 377.8,-36"/>
+<text text-anchor="middle" x="350.8" y="-13.8" font-family="Times,serif" font-size="14.00">sport</text>
+</g>
+<!-- sport.constants -->
+<g id="node2" class="node">
+<title>sport.constants</title>
+<polygon fill="none" stroke="black" points="99.6,-252 0,-252 0,-216 99.6,-216 99.6,-252"/>
+<text text-anchor="middle" x="49.8" y="-229.8" font-family="Times,serif" font-size="14.00">sport.constants</text>
+</g>
+<!-- sport&#45;&gt;sport.constants -->
+<g id="edge1" class="edge">
+<title>sport-&gt;sport.constants</title>
+<path fill="none" stroke="black" d="M323.59,-20.11C278.78,-23.04 187.93,-33.63 122.8,-72 85.66,-93.88 75.07,-104.5 57.8,-144 49.44,-163.12 47.66,-186.73 47.85,-204.82"/>
+<polygon fill="black" stroke="black" points="48.17,-214.59 43.35,-204.75 48.05,-210.81 47.84,-204.6 47.84,-204.6 47.84,-204.6 48.05,-210.81 52.34,-204.45 48.17,-214.59"/>
+</g>
+<!-- sport.constraint -->
+<g id="node3" class="node">
+<title>sport.constraint</title>
+<polygon fill="none" stroke="black" points="169.16,-180 66.45,-180 66.45,-144 169.16,-144 169.16,-180"/>
+<text text-anchor="middle" x="117.8" y="-157.8" font-family="Times,serif" font-size="14.00">sport.constraint</text>
+</g>
+<!-- sport&#45;&gt;sport.constraint -->
+<g id="edge2" class="edge">
+<title>sport-&gt;sport.constraint</title>
+<path fill="none" stroke="black" d="M323.46,-18.27C280.23,-18.63 195.97,-25.73 146.8,-72 130.16,-87.66 123.05,-112.97 120.02,-132.6"/>
+<polygon fill="black" stroke="black" points="118.79,-142.46 115.57,-131.98 119.26,-138.71 120.03,-132.54 120.03,-132.54 120.03,-132.54 119.26,-138.71 124.5,-133.09 118.79,-142.46"/>
+</g>
+<!-- sport.covar_estimator -->
+<g id="node4" class="node">
+<title>sport.covar_estimator</title>
+<polygon fill="none" stroke="black" points="554.65,-108 416.96,-108 416.96,-72 554.65,-72 554.65,-108"/>
+<text text-anchor="middle" x="485.8" y="-85.8" font-family="Times,serif" font-size="14.00">sport.covar_estimator</text>
+</g>
+<!-- sport&#45;&gt;sport.covar_estimator -->
+<g id="edge3" class="edge">
+<title>sport-&gt;sport.covar_estimator</title>
+<path fill="none" stroke="black" d="M378.12,-33.17C396.61,-42.75 421.43,-55.62 442.57,-66.59"/>
+<polygon fill="black" stroke="black" points="451.22,-71.07 440.28,-70.46 447.87,-69.33 442.35,-66.47 442.35,-66.47 442.35,-66.47 447.87,-69.33 444.42,-62.47 451.22,-71.07"/>
+</g>
+<!-- sport.dao -->
+<g id="node5" class="node">
+<title>sport.dao</title>
+<polygon fill="none" stroke="black" points="640.66,-108 572.94,-108 572.94,-72 640.66,-72 640.66,-108"/>
+<text text-anchor="middle" x="606.8" y="-85.8" font-family="Times,serif" font-size="14.00">sport.dao</text>
+</g>
+<!-- sport&#45;&gt;sport.dao -->
+<g id="edge4" class="edge">
+<title>sport-&gt;sport.dao</title>
+<path fill="none" stroke="black" d="M378.12,-25.91C417.69,-34.95 492.39,-51.99 554.8,-72 557.25,-72.79 559.76,-73.64 562.3,-74.54"/>
+<polygon fill="black" stroke="black" points="571.63,-77.95 560.69,-78.74 568.08,-76.65 562.24,-74.51 562.24,-74.51 562.24,-74.51 568.08,-76.65 563.78,-70.29 571.63,-77.95"/>
+</g>
+<!-- sport.objective -->
+<g id="node7" class="node">
+<title>sport.objective</title>
+<polygon fill="none" stroke="black" points="323.21,-180 224.4,-180 224.4,-144 323.21,-144 323.21,-180"/>
+<text text-anchor="middle" x="273.8" y="-157.8" font-family="Times,serif" font-size="14.00">sport.objective</text>
+</g>
+<!-- sport&#45;&gt;sport.objective -->
+<g id="edge5" class="edge">
+<title>sport-&gt;sport.objective</title>
+<path fill="none" stroke="black" d="M341.36,-36.41C328.13,-60.82 303.94,-105.42 288.39,-134.11"/>
+<polygon fill="black" stroke="black" points="283.66,-142.82 284.47,-131.88 285.46,-139.49 288.43,-134.03 288.43,-134.03 288.43,-134.03 285.46,-139.49 292.38,-136.17 283.66,-142.82"/>
+</g>
+<!-- sport.optimizer -->
+<g id="node8" class="node">
+<title>sport.optimizer</title>
+<polygon fill="none" stroke="black" points="257.38,-108 156.23,-108 156.23,-72 257.38,-72 257.38,-108"/>
+<text text-anchor="middle" x="206.8" y="-85.8" font-family="Times,serif" font-size="14.00">sport.optimizer</text>
+</g>
+<!-- sport&#45;&gt;sport.optimizer -->
+<g id="edge6" class="edge">
+<title>sport-&gt;sport.optimizer</title>
+<path fill="none" stroke="black" d="M323.38,-32.33C303.4,-42.04 275.88,-55.42 252.6,-66.74"/>
+<polygon fill="black" stroke="black" points="243.67,-71.08 250.7,-62.66 247.07,-69.42 252.67,-66.71 252.67,-66.71 252.67,-66.71 247.07,-69.42 254.63,-70.75 243.67,-71.08"/>
+</g>
+<!-- sport.portfolio -->
+<g id="node9" class="node">
+<title>sport.portfolio</title>
+<polygon fill="none" stroke="black" points="359.05,-252 262.56,-252 262.56,-216 359.05,-216 359.05,-252"/>
+<text text-anchor="middle" x="310.8" y="-229.8" font-family="Times,serif" font-size="14.00">sport.portfolio</text>
+</g>
+<!-- sport&#45;&gt;sport.portfolio -->
+<g id="edge7" class="edge">
+<title>sport-&gt;sport.portfolio</title>
+<path fill="none" stroke="black" d="M350.23,-36.18C348.93,-65.92 344.76,-128.7 331.8,-180 329.67,-188.44 326.52,-197.35 323.31,-205.39"/>
+<polygon fill="black" stroke="black" points="319.45,-214.59 319.17,-203.63 320.91,-211.1 323.32,-205.37 323.32,-205.37 323.32,-205.37 320.91,-211.1 327.47,-207.11 319.45,-214.59"/>
+</g>
+<!-- sport.security -->
+<g id="node10" class="node">
+<title>sport.security</title>
+<polygon fill="none" stroke="black" points="404.71,-324 312.89,-324 312.89,-288 404.71,-288 404.71,-324"/>
+<text text-anchor="middle" x="358.8" y="-301.8" font-family="Times,serif" font-size="14.00">sport.security</text>
+</g>
+<!-- sport&#45;&gt;sport.security -->
+<g id="edge8" class="edge">
+<title>sport-&gt;sport.security</title>
+<path fill="none" stroke="black" d="M354.65,-36.09C356.82,-46.43 359.37,-59.91 360.8,-72 370.19,-151.51 374.53,-172.22 367.8,-252 367.12,-260.12 365.85,-268.87 364.48,-276.88"/>
+<polygon fill="black" stroke="black" points="362.68,-286.71 360.06,-276.06 363.36,-282.99 364.48,-276.87 364.48,-276.87 364.48,-276.87 363.36,-282.99 368.91,-277.69 362.68,-286.71"/>
+</g>
+<!-- sport.constraint&#45;&gt;sport.constants -->
+<g id="edge9" class="edge">
+<title>sport.constraint-&gt;sport.constants</title>
+<path fill="none" stroke="black" d="M100.99,-180.3C92.92,-188.61 83.1,-198.72 74.22,-207.86"/>
+<polygon fill="black" stroke="black" points="67.27,-215.02 71.01,-204.71 69.9,-212.31 74.23,-207.85 74.23,-207.85 74.23,-207.85 69.9,-212.31 77.46,-210.98 67.27,-215.02"/>
+</g>
+<!-- sport.functions -->
+<g id="node6" class="node">
+<title>sport.functions</title>
+<polygon fill="none" stroke="black" points="265.6,-324 166,-324 166,-288 265.6,-288 265.6,-324"/>
+<text text-anchor="middle" x="215.8" y="-301.8" font-family="Times,serif" font-size="14.00">sport.functions</text>
+</g>
+<!-- sport.constraint&#45;&gt;sport.functions -->
+<g id="edge10" class="edge">
+<title>sport.constraint-&gt;sport.functions</title>
+<path fill="none" stroke="black" d="M129.82,-180.41C146.81,-205.03 177.98,-250.2 197.76,-278.86"/>
+<polygon fill="black" stroke="black" points="203.3,-286.89 193.92,-281.21 201.15,-283.77 197.62,-278.66 197.62,-278.66 197.62,-278.66 201.15,-283.77 201.32,-276.1 203.3,-286.89"/>
+</g>
+<!-- sport.constraint&#45;&gt;sport.portfolio -->
+<g id="edge11" class="edge">
+<title>sport.constraint-&gt;sport.portfolio</title>
+<path fill="none" stroke="black" d="M166.01,-180.48C192.24,-190 224.89,-201.84 252.55,-211.87"/>
+<polygon fill="black" stroke="black" points="261.73,-215.2 250.8,-216.02 258.18,-213.91 252.33,-211.79 252.33,-211.79 252.33,-211.79 258.18,-213.91 253.87,-207.56 261.73,-215.2"/>
+</g>
+<!-- sport.dao&#45;&gt;sport -->
+<g id="edge12" class="edge">
+<title>sport.dao-&gt;sport</title>
+<path fill="none" stroke="black" d="M572.4,-71.87C509.38,-51.7 433.95,-34.55 389.18,-25.62"/>
+<polygon fill="black" stroke="black" points="379.41,-23.71 390.09,-21.21 383.13,-24.43 389.23,-25.63 389.23,-25.63 389.23,-25.63 383.13,-24.43 388.37,-30.04 379.41,-23.71"/>
+</g>
+<!-- sport.objective&#45;&gt;sport.functions -->
+<g id="edge13" class="edge">
+<title>sport.objective-&gt;sport.functions</title>
+<path fill="none" stroke="black" d="M266.69,-180.41C256.77,-204.71 238.66,-249.03 226.94,-277.73"/>
+<polygon fill="black" stroke="black" points="223.25,-286.76 222.87,-275.8 224.68,-283.26 227.03,-277.5 227.03,-277.5 227.03,-277.5 224.68,-283.26 231.2,-279.21 223.25,-286.76"/>
+</g>
+<!-- sport.objective&#45;&gt;sport.portfolio -->
+<g id="edge14" class="edge">
+<title>sport.objective-&gt;sport.portfolio</title>
+<path fill="none" stroke="black" d="M282.95,-180.3C287.07,-188.1 292.03,-197.49 296.62,-206.17"/>
+<polygon fill="black" stroke="black" points="301.19,-214.82 292.54,-208.08 299.42,-211.48 296.52,-205.98 296.52,-205.98 296.52,-205.98 299.42,-211.48 300.5,-203.87 301.19,-214.82"/>
+</g>
+<!-- sport.optimizer&#45;&gt;sport.constraint -->
+<g id="edge15" class="edge">
+<title>sport.optimizer-&gt;sport.constraint</title>
+<path fill="none" stroke="black" d="M184.8,-108.3C173.89,-116.89 160.53,-127.39 148.62,-136.76"/>
+<polygon fill="black" stroke="black" points="140.81,-142.9 145.89,-133.18 143.79,-140.56 148.67,-136.72 148.67,-136.72 148.67,-136.72 143.79,-140.56 151.46,-140.25 140.81,-142.9"/>
+</g>
+<!-- sport.optimizer&#45;&gt;sport.functions -->
+<g id="edge16" class="edge">
+<title>sport.optimizer-&gt;sport.functions</title>
+<path fill="none" stroke="black" d="M207.52,-108.15C209.07,-144.93 212.72,-231.71 214.61,-276.76"/>
+<polygon fill="black" stroke="black" points="215.03,-286.55 210.11,-276.75 214.87,-282.77 214.61,-276.56 214.61,-276.56 214.61,-276.56 214.87,-282.77 219.1,-276.37 215.03,-286.55"/>
+</g>
+<!-- sport.optimizer&#45;&gt;sport.objective -->
+<g id="edge17" class="edge">
+<title>sport.optimizer-&gt;sport.objective</title>
+<path fill="none" stroke="black" d="M223.36,-108.3C231.31,-116.61 240.99,-126.72 249.74,-135.86"/>
+<polygon fill="black" stroke="black" points="256.59,-143.02 246.42,-138.9 253.97,-140.28 249.67,-135.79 249.67,-135.79 249.67,-135.79 253.97,-140.28 252.92,-132.68 256.59,-143.02"/>
+</g>
+<!-- sport.portfolio&#45;&gt;sport.functions -->
+<g id="edge18" class="edge">
+<title>sport.portfolio-&gt;sport.functions</title>
+<path fill="none" stroke="black" d="M287.32,-252.3C275.56,-260.97 261.13,-271.6 248.32,-281.04"/>
+<polygon fill="black" stroke="black" points="240.32,-286.93 245.71,-277.38 243.37,-284.69 248.38,-281 248.38,-281 248.38,-281 243.37,-284.69 251.04,-284.62 240.32,-286.93"/>
+</g>
+<!-- sport.portfolio&#45;&gt;sport.security -->
+<g id="edge19" class="edge">
+<title>sport.portfolio-&gt;sport.security</title>
+<path fill="none" stroke="black" d="M322.67,-252.3C328.13,-260.27 334.73,-269.9 340.79,-278.74"/>
+<polygon fill="black" stroke="black" points="346.38,-286.89 337.02,-281.19 344.25,-283.77 340.73,-278.64 340.73,-278.64 340.73,-278.64 344.25,-283.77 344.44,-276.1 346.38,-286.89"/>
+</g>
+</g>
+</svg>

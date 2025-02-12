@@ -1,14 +1,17 @@
+from typing import Dict
+
 from cvxopt import matrix
 import numpy as np
 
 from sport.functions import obj_avg_max_drawdown, obj_neg_rtrn, obj_neg_sharpe_ratio, obj_qp, obj_risk, obj_risk_parity
+from .portfolio import Portfolio
 
 
 class Objective:
     """A factory class that generates objective functions for optimizers."""
 
     @classmethod
-    def init_avg_max_drawdown_obj(clsc, ptf, num_days):
+    def init_avg_max_drawdown_obj(clsc, ptf: Portfolio, num_days: int) -> "Objective":
         """Factory method to generate maximum drawdown objective function.
 
         Args:
@@ -22,12 +25,12 @@ class Objective:
         return Objective({'Function': obj_avg_max_drawdown, 'Params': Objective.produce_params_avg_max_drawdown(ptf, num_days)})
 
     @classmethod
-    def init_mean_varinace_obj(cls, ptf, risk_tol):
+    def init_mean_varinace_obj(cls, ptf: Portfolio, risk_tol: float) -> "Objective":
         """Factory method to generate mean-variance objective function.
 
         Args:
             ptf (Portfolio): a Portfolio object.
-            risk_tol (double): risk tolerance.
+            risk_tol (float): risk tolerance.
 
         Returns:
             obj (Objective): an Objective object for mean-variance objective function.
@@ -35,7 +38,7 @@ class Objective:
         return Objective({'Function': obj_qp, 'Params': Objective.produce_params_qp(ptf=ptf, risk_tol=risk_tol)})
 
     @classmethod
-    def init_risk_obj(cls, ptf):
+    def init_risk_obj(cls, ptf: Portfolio) -> "Objective":
         """Factory method to generate risk objective function.
 
         Args:
@@ -47,7 +50,7 @@ class Objective:
         return Objective({'Function': obj_risk, 'Params': Objective.produce_params_risk(ptf)})
 
     @classmethod
-    def init_risk_parity_obj(cls, ptf):
+    def init_risk_parity_obj(cls, ptf: Portfolio) -> "Objective":
         """Factory method to generate risk-parity objective function.
 
         Args:
@@ -59,7 +62,7 @@ class Objective:
         return Objective({'Function': obj_risk_parity, 'Params': Objective.produce_params_risk_parity(ptf)})
 
     @classmethod
-    def init_rtrn_obj(cls, ptf):
+    def init_rtrn_obj(cls, ptf: Portfolio) -> "Objective":
         """Factory method to generate return objective function.
 
         Args:
@@ -71,12 +74,12 @@ class Objective:
         return Objective({'Function': obj_neg_rtrn, 'Params': Objective.produce_params_rtrn(ptf)})
 
     @classmethod
-    def init_sharpe_ratio_obj(cls, ptf, benchmark):
+    def init_sharpe_ratio_obj(cls, ptf: Portfolio, benchmark: float) -> "Objective":
         """Factory method to generate Sharpe ratio objective function.
 
         Args:
             ptf (Portfolio): a Portfolio object.
-            benchmark (double): benchmark return rate.
+            benchmark (float): benchmark return rate.
 
         Returns:
             obj (Objective): an Objective object for Sharpe ratio objective function.
@@ -84,7 +87,7 @@ class Objective:
         return Objective({'Function': obj_neg_sharpe_ratio, 'Params': Objective.produce_params_sharpe(ptf, benchmark)})
 
     @classmethod
-    def produce_params_avg_max_drawdown(cls, ptf, num_days):
+    def produce_params_avg_max_drawdown(cls, ptf: Portfolio, num_days: int) -> Dict:
         """Generate parameters for maximum drawdown optimization.
 
         Args:
@@ -101,12 +104,12 @@ class Objective:
         return {'RETURN': rtrn, 'COVAR': Q, 'T': num_days}
 
     @classmethod
-    def produce_params_qp(cls, ptf, risk_tol):
+    def produce_params_qp(cls, ptf: Portfolio, risk_tol: float) -> Dict:
         """Generate parameters for QP optimization.
 
         Args:
             ptf (Portfolio): a Portfolio object.
-            risk_tol (double): risk tolerance multipled to the quadratic form.
+            risk_tol (float): risk tolerance multipled to the quadratic form.
 
         Returns:
             params (dict): {'Q': covariance matrix (cvxopt.matrix), 'p': negative of returns (cvxopt.matrix)}.
@@ -117,7 +120,7 @@ class Objective:
         return {'Q': Q, 'p': p}
 
     @classmethod
-    def produce_params_risk(cls, ptf):
+    def produce_params_risk(cls, ptf: Portfolio) -> Dict:
         """Generate parameter for risk optimization.
 
         Args:
@@ -131,7 +134,7 @@ class Objective:
         return {'COVAR': Q}
 
     @classmethod
-    def produce_params_risk_parity(cls, ptf):
+    def produce_params_risk_parity(cls, ptf: Portfolio) -> Dict:
         """Generate parameter for risk-parity optimization.
 
         Args:
@@ -145,7 +148,7 @@ class Objective:
         return {'COVAR': Q}
 
     @classmethod
-    def produce_params_rtrn(cls, ptf):
+    def produce_params_rtrn(cls, ptf: Portfolio) -> Dict:
         """Generate parameters for return objective function.
 
         Args:
@@ -160,12 +163,12 @@ class Objective:
         return {'RETURN': p, 'NUM_VAR': n}
 
     @classmethod
-    def produce_params_sharpe(cls, ptf, bmk):
+    def produce_params_sharpe(cls, ptf: Portfolio, bmk: float) -> Dict:
         """Generate parameters for Sharpe ratio objective function.
 
         Args:
             ptf (Portfolio): a Portfolio object.
-
+            bmk (float): benchmark return.
         Returns:
             params (dict): {'Q': covar matrix (numpy.ndarray), 'p': returns (numpy.array), 'bmk': benchmark return (float)}.
         """
@@ -174,7 +177,7 @@ class Objective:
 
         return {'Q': Q, 'p': p, 'bmk': bmk}
 
-    def __init__(self, args):
+    def __init__(self, args: Dict) -> None:
         """
         Args dictionary keys: {'Q', 'p'}, {'Function', 'Params'}.
 
@@ -194,7 +197,7 @@ class Objective:
 
         self._args = args
 
-    def get_obj_cvxopt_solvers_qp(self):
+    def get_obj_cvxopt_solvers_qp(self) -> Dict:
         """Generate objective function for cvxopt.sovlers.qp.
 
         Returns:
@@ -211,7 +214,7 @@ class Objective:
 
         return value
 
-    def get_obj_scipy_optimize_minimize_trust_constr(self):
+    def get_obj_scipy_optimize_minimize_trust_constr(self) -> Dict:
         """Generate objective function for scipy.optimize.minimize, method 'trust-constr'.
 
         Returns:

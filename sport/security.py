@@ -1,12 +1,14 @@
+from typing import Dict,Set
+
 import pandas as pd
 
 
 class Security:
     """
-    An abstraction of single security, single index etc. that carries an ID and a list of attributes
+    An abstraction of single security, single index etc. that carries an ID and a list of attributes.
     """
 
-    def __init__(self, sec_id, attributes):
+    def __init__(self, sec_id: str, attributes: Dict[str, object]) -> None:
         """
         Args:
             sec_id (str): ID of this Security instance.
@@ -27,7 +29,7 @@ class Security:
             if attributes.get(attr_name) is not None:
                 self._attributes[attr_name.upper()] = attributes.get(attr_name)
 
-    def equals(self, sec2):
+    def equals(self, sec2: "Security") -> bool:
         """Compare two securities: True iff attribute names and values match.
 
         Args:
@@ -44,15 +46,15 @@ class Security:
 
         return True
 
-    def get_attr_names(self):
+    def get_attr_names(self) -> Set[str]:
         """Get the names of all the attributes in this Security instance.
 
         Returns:
-            attr_names (set): a set of attribute names.
+            attr_names (set): a set of attribute names in string.
         """
         return set(self._attributes.keys())
 
-    def get_attr_value(self, attr_name):
+    def get_attr_value(self, attr_name: str) -> object:
         """ Get the value of an attribute according to its name; None if attribute does not exist.
 
         Args:
@@ -68,7 +70,7 @@ class Security:
 
         return value
 
-    def get_id(self):
+    def get_id(self) -> str:
         """Get the ID of this Security instance.
 
         Returns:
@@ -76,7 +78,7 @@ class Security:
         """
         return self._sec_id
 
-    def reproduce(self, new_id=None):
+    def reproduce(self, new_id: str = None) -> "Security":
         """Clone a copy of this Security object.
 
         Args:
@@ -90,7 +92,7 @@ class Security:
 
         return Security(sec_id, attributes)
 
-    def reproduce_by_attr(self, attr_nm, attr_value, new_id=None):
+    def reproduce_by_attr(self, attr_nm: str, attr_value: object, new_id: str = None) -> "Security":
         """Reproduce a Security object by updating its attributes; if attribute does not exist, then insert.
 
         Args:
@@ -107,7 +109,7 @@ class Security:
 
         return Security(sec_id, new_attributes)
 
-    def to_dataframe(self):
+    def to_dataframe(self) -> pd.DataFrame:
         """Convert to data frame representation.
 
         Returns:

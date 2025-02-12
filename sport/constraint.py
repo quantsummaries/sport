@@ -1,4 +1,5 @@
 import re
+from typing import Dict, List
 
 from cvxopt import matrix
 import numpy as np
@@ -7,13 +8,14 @@ from scipy.optimize import Bounds, LinearConstraint, NonlinearConstraint, BFGS
 
 from .constants import Constants
 from .functions import constr_avg_max_drawdown, constr_risk
+from .portfolio import Portfolio
 
 
 class Constraint:
     """A factory class that generates constrains for portfolio optimization."""
 
     @staticmethod
-    def _parse_bounds(bounds):
+    def _parse_bounds(bounds: str) -> tuple:
         """Parse a bounds in string to lower and upper bounds in float.
 
         Args:
@@ -32,8 +34,8 @@ class Constraint:
         return lb, ub
 
     @staticmethod
-    def _translate(cfg_data_raw, ptf):
-        """Translate raw constraint data to security-level constrants.
+    def _translate(cfg_data_raw: pd.DataFrame, ptf: Portfolio) -> pd.DataFrame:
+        """Translate raw constraint data to security-level constraints.
 
         Args:
             cfg_data_raw (pandas.DataFrame): table of raw constraint data.
@@ -100,7 +102,7 @@ class Constraint:
         return pd.concat(cfg_data).reset_index(drop=True)
 
     @classmethod
-    def init_for_cvxopt_solvers_qp(cls, G, h, A, b):
+    def init_for_cvxopt_solvers_qp(cls, G: matrix, h: matrix, A: matrix, b: matrix) -> "Constraint":
         """Factory method to create Constraint object for cvxopt.solvers.qp.
 
         Args:
@@ -112,7 +114,10 @@ class Constraint:
         return Constraint(args={'G': G, 'h': h, 'A': A, 'b': b})
 
     @classmethod
-    def init_for_scipy_optimize_minimize_trust_constr(cls, bounds, linear_constraint, nonlinear_constraint):
+    def init_for_scipy_optimize_minimize_trust_constr(cls,
+                                                      bounds: Bounds,
+                                                      linear_constraint: LinearConstraint,
+                                                      nonlinear_constraint: NonlinearConstraint) -> "Constraint":
         """Factory method to create Constraint object for scipy.optimize.minimize, method 'trust-constr'.
 
         Args:
@@ -125,7 +130,10 @@ class Constraint:
                                 'NonlinearConstraint': nonlinear_constraint})
 
     @classmethod
-    def init_from_table(cls, ptf, data, data_format):
+    def init_from_table(cls,
+                        ptf: Portfolio,
+                        data: str,
+                        data_format: pd.DataFrame) -> "Constraint":
         """Factory method to create Constraint object from constraints table.
 
         Args:
@@ -135,7 +143,7 @@ class Constraint:
         """
         return Constraint(args={'Portfolio': ptf, 'Data': data, 'DataFormat': data_format})
 
-    def __init__(self, args):
+    def __init__(self, args: Dict) -> None:
         """ Low level constructor with args (dict) keys: {'Portfolio', 'Data', 'DataFormat'}, {'G', 'h', 'A', 'b'}, {'Bounds', 'LinearConstraint', 'NonlinearConstraint'}.
         """
         if args is None:
@@ -195,7 +203,7 @@ class Constraint:
         else:
             raise ValueError(str(self._args.keys()) + ' are not supported')
 
-    def _get_idx_from_id(self, sec_id):
+    def _get_idx_from_id(self, sec_id: str) -> int:
         """Get the idx of a variable by its associated security ID.
 
         Args:
@@ -206,7 +214,7 @@ class Constraint:
         """
         return self._sec_id_to_idx.get(sec_id)
 
-    def _process_all(sec_id, sec_id_list):
+    def _process_all(sec_id: str, sec_id_list: List[str]) -> str:
         """Convert 'ALL' in configuration file to 'id1+id2+...'.
 
         Args:
@@ -218,7 +226,7 @@ class Constraint:
         all_id = '+'.join(sec_id_list)
         return sec_id.replace('ALL', all_id)
 
-    def get_constr_cvxopt_solvers_qp(self):
+    def get_constr_cvxopt_solvers_qp(self) -> Dict:
         """Get constraints for cvxopt.solvers.qp.
 
         Returns:
@@ -283,7 +291,7 @@ class Constraint:
 
         return {'G': G, 'h': h, 'A': A, 'b': b}
 
-    def get_constr_scipy_optimize_minimize_trust_constr(self):
+    def get_constr_scipy_optimize_minimize_trust_constr(self) -> tuple:
         """Get constraints for scipy.optimize.minimize, method='trust-constr'.
 
         Returns:
@@ -404,7 +412,7 @@ class Constraint:
                 'LinearConstraint': linear_constraint,
                 'NonlinearConstraint': nonlinear_constraint}
 
-    def to_dataframe(self, raw=True):
+    def to_dataframe(self, raw: bool = True) -> pd.DataFrame:
         """Get the constraints in a data frame.
 
         Args:

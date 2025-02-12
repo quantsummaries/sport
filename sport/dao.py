@@ -1,16 +1,18 @@
 import math
 import os
+from typing import Dict, List
 import warnings
 
 import pandas as pd
 
 from sport import Constants, Security
 
+
 class Dao:
     """Data access object class to get security attributes."""
 
     @staticmethod
-    def read_excel_input(file_path):
+    def read_excel_input_cn(file_path: str) -> tuple:
         """Read inputs from an Excel file with given format.
 
         Args:
@@ -95,7 +97,88 @@ class Dao:
         return sec_id_list, returns, covar, objectives, constr_df
 
     @staticmethod
-    def write_to_excel(file_path, dfs):
+    def read_excel_input_en(file_path: str) -> tuple:
+        """Read inputs from an Excel file with given format.
+
+        Args:
+            file_path (string): file path of the Excel input file.
+
+        Returns:
+            sec_id_list (list): list of security IDs.
+            returns (dict): {security id: nonp-NaN return rate}.
+            covar (pandas.DataFrame): covariance matrix in data frame format.
+            objectives (dict): {'MEAN_VARIANCE': risk_tol, 'MAX_SHARPE_RATIO': benchmark rate, others: NaN}.
+            constr_df (pandas.DataFrame): a data frame of constraints.
+        """
+
+        # 'PORTFOLIO'
+        input_port = pd.read_excel(io=file_path, sheet_name='PORTFOLIO', dtype={'SEC_ID': 'str', 'SEC_NM': 'str', 'RETURN': 'float'})
+        sec_id_list = input_port['SEC_ID'].to_list()
+        returns = {k: v for k, v in zip(sec_id_list, input_port['EXPECTED_RETURN'].to_list()) if not math.isnan(v)}
+
+        # 'OBJECTIVE'
+        input_objective = pd.read_excel(io=file_path, sheet_name='OBJECTIVE',
+                                        dtype={'OBJECTIVE': 'str', 'CHOOSE_OBJECTIVE': 'str', 'PARAMETER': 'float'})
+        objectives = dict()
+        for idx in input_objective.index:
+            if input_objective.loc[idx, 'CHOOSE_OBJECTIVE'] == 'Y':
+                objectives[input_objective.loc[idx, 'OBJECTIVE']] = input_objective.loc[idx, 'PARAMETER']
+
+        # 'CONSTRAINT'
+        input_constr = pd.read_excel(io=file_path, sheet_name='CONSTRAINT',
+                                     dtype={'SEC_ID': 'str', 'ATTRIBUTE': 'str', 'ATTRIBUTE_PARAMS': 'float', 'MIN': 'float', 'MAX': 'float'})
+        for idx in input_constr.index:
+            val = input_constr.loc[idx, 'ATTRIBUTE']
+            if val is None:
+                raise ValueError(input_constr.loc[idx, 'ATTRIBUTE'] + ' is not supported')
+            else:
+                input_constr.loc[idx, 'ATTRIBUTE'] = val
+
+        constr_df = pd.DataFrame(columns=['TYPE', 'SEC_ID', 'ATTRIBUTE', 'ATTRIBUTE_PARAMS', 'VALUE'])
+        for idx in input_constr.index:
+            sec_id = input_constr.loc[idx, 'SEC_ID']
+            attribute = input_constr.loc[idx, 'ATTRIBUTE']
+            attr_params = input_constr.loc[idx, 'ATTRIBUTE_PARAMS']
+            min = input_constr.loc[idx, 'MIN']
+            max = input_constr.loc[idx, 'MAX']
+            if attribute in Constants.nonlinear_constr:
+                type = 'NONLINEAR_'
+            else:
+                type = 'LINEAR_'
+            if math.isclose(min, max):
+                type = type + 'EQ'
+                value = str(min)
+            elif min < max:
+                type = type + 'INEQ'
+                value = '[' + str(min) + ':' + str(max) + ']'
+            else:
+                raise ValueError('min is greater than max')
+            constr_df.loc[idx, 'TYPE'] = type
+            constr_df.loc[idx, 'SEC_ID'] = sec_id
+            constr_df.loc[idx, 'ATTRIBUTE'] = attribute
+            constr_df.loc[idx, 'ATTRIBUTE_PARAMS'] = attr_params
+            constr_df.loc[idx, 'VALUE'] = value
+
+        constr_df.loc[idx+1, 'TYPE'] = 'LINEAR_EQ'
+        constr_df.loc[idx+1, 'SEC_ID'] = 'ALL'
+        constr_df.loc[idx+1, 'ATTRIBUTE'] = 'WEIGHT'
+        constr_df.loc[idx+1, 'ATTRIBUTE_PARAMS'] = None
+        constr_df.loc[idx+1, 'VALUE'] = 1
+
+        # 'COVAR_MATRIX'
+        covar = pd.read_excel(io=file_path, sheet_name='COVAR_MATRIX', dtype={'SEC_ID': 'str'})
+        covar.columns = ['SEC_ID' if x == 'SEC_ID' else x for x in covar.columns]
+        covar.set_index(keys=['SEC_ID'], drop=True, inplace=True)
+
+        # '客户的投资基准'
+        #benchmark = pd.read_excel(io=file_path, sheet_name='客户的投资基准', dtype={'投资基准代码': 'str'})
+        #benchmark = benchmark[['日期', '日收益率']]
+        #benchmark.columns = ['DATE', 'RETURN']
+        #print(benchmark)
+        return sec_id_list, returns, covar, objectives, constr_df
+
+    @staticmethod
+    def write_to_excel(file_path: str, dfs: Dict) -> None:
         """Write to an Excel file a dictionary of data frames.
 
         Args:
@@ -112,12 +195,14 @@ class Dao:
         writer.close()
 
     @classmethod
-    def init_from_dataframes(cls, covar, attributes):
+    def init_from_dataframes(cls, covar: pd.DataFrame, attributes: pd.DataFrame) -> "Dao":
         """Factory method to construct a Dao object from data frames.
 
         Args:
-             covar (pandas.DataFrame): a data frame that contains covariance matrix.
-             attributes (pandas.DataFrame): a data frame that contains security attributes information.
+            covar (pandas.DataFrame): a data frame that contains covariance matrix.
+            attributes (pandas.DataFrame): a data frame that contains security attributes information.
+        Returns:
+            dao (Dao): data access object.
         """
         if covar is None:
             raise ValueError('Covar matrix data frame is None')
@@ -127,8 +212,15 @@ class Dao:
         return Dao({'Covar': covar, 'Attributes': attributes})
 
     @classmethod
-    def init_from_default_data(cls, covar_path: str, attributes_path: str):
-        """Factory method to construct a Dao object from default data."""
+    def init_from_default_data(cls, covar_path: str, attributes_path: str) -> "Dao":
+        """Factory method to construct a Dao object from default data.
+
+        Args:
+            covar_path (str): file path to covariance file.
+            attributes_path (str): file path to attributes file.
+        Returns:
+            dao (Dao): data access object.
+        """
 
         # load covar matrix
         if not os.path.exists(covar_path):
@@ -145,7 +237,7 @@ class Dao:
 
         return Dao.init_from_dataframes(covar, attributes)
 
-    def __init__(self, args):
+    def __init__(self, args: Dict) -> None:
         """
         Args dictionary keys: {'Covar', 'Attributes'}
 
@@ -201,7 +293,7 @@ class Dao:
 
             self._securities.append(Security(sec_id, sec_attributes))
 
-    def get_corr_matrix(self):
+    def get_corr_matrix(self) -> pd.DataFrame:
         """Get the correlation matrix of the security returns.
 
         Returns:
@@ -209,7 +301,7 @@ class Dao:
         """
         return self._corr_matrix.copy(deep=True)
 
-    def get_covar_matrix(self, sec_id_list=None):
+    def get_covar_matrix(self, sec_id_list: List[str] = None) -> pd.DataFrame:
         """Get the covariance matrix of the security returns.
 
         Args:
@@ -226,7 +318,7 @@ class Dao:
 
             return self._covar_matrix.loc[sec_id_list, sec_id_list].copy(deep=True)
 
-    def get_securities_list(self, sec_id_list=None):
+    def get_securities_list(self, sec_id_list: List[str] = None) -> List[Security]:
         """Get a list of Security objects.
 
         Args:
@@ -241,7 +333,7 @@ class Dao:
             secs = self.get_securities_dict(sec_id_list)
             return [secs.get(sec_id) for sec_id in sec_id_list]
 
-    def get_securities_dict(self, sec_id_list=None):
+    def get_securities_dict(self, sec_id_list: List[str] = None) -> Dict[str, Security]:
         """Get a dictionary of Security objects: {security id: Security object}.
 
         Args:
@@ -255,7 +347,7 @@ class Dao:
         else:
             return {x.get_id(): x for x in self._securities if x.get_id() in sec_id_list}
 
-    def to_dataframe(self):
+    def to_dataframe(self) -> pd.DataFrame:
         """Get the data in the format of a data frame.
 
         Returns:

@@ -1,15 +1,17 @@
+from typing import Dict, List
+
 import numpy as np
 import pandas as pd
 
 
-def constr_avg_max_drawdown(x, params_constr):
+def constr_avg_max_drawdown(x: List[float], params_constr: Dict[str, object]) -> float:
     """Calculate average maximum drawdown of a portfolio.
 
-    x (list): a list of unknown variables (typically a weight vector).
+    Args:
+        x (list): a list of unknown variables (typically a weight vector).
         params_constr (dict): {'RETURN': return vector (numpy.array), 'COVAR': covariance matrix (numpy.ndarray), 'T': number of days, 'MASK': a list of 0's and 1's}.
-
     Returns:
-        emd (double): expected maximum drawdown of a portfolio.
+        emd (float): expected maximum drawdown of a portfolio.
     """
 
     if params_constr is None:
@@ -52,7 +54,7 @@ def constr_avg_max_drawdown(x, params_constr):
     raise RuntimeError('Calculation is not caught by logic in obj_avg_max_drawdown')
 
 
-def constr_risk(x, params_constr):
+def constr_risk(x: List[float], params_constr: Dict[str, object]) -> float:
     """Calculate risk of a portfolio.
 
     Args:
@@ -60,7 +62,7 @@ def constr_risk(x, params_constr):
         params_constr (dict): {'COVAR': covariance matrix (numpy.ndarray), 'MASK': a list of 0's and 1's}.
 
     Returns:
-        risk (double): risk of a portfolio.
+        risk (float): risk of a portfolio.
     """
     if params_constr is None:
         raise Exception('Input constraint parameters are None')
@@ -80,7 +82,7 @@ def constr_risk(x, params_constr):
     return risk
 
 
-def obj_avg_max_drawdown(x, params_obj):
+def obj_avg_max_drawdown(x: List[float], params_obj: Dict[str, object]) -> float:
     """Average maximum drawdown.
 
     Args:
@@ -88,7 +90,7 @@ def obj_avg_max_drawdown(x, params_obj):
         params_obj (dict): {'RETURN': return vector (numpy.array), 'COVAR': covariance matrix (numpy.ndarray), 'T': number of days}.
 
     Returns:
-        emd (double): expected maximum drawdown.
+        emd (float): expected maximum drawdown.
     """
     if params_obj is None:
         raise Exception('Input objective parameters are None')
@@ -124,7 +126,7 @@ def obj_avg_max_drawdown(x, params_obj):
     raise RuntimeError('Calculation is not caught by logic in obj_avg_max_drawdown')
 
 
-def obj_neg_rtrn(x, params_obj):
+def obj_neg_rtrn(x: List[float], params_obj: Dict[str, object]) -> float:
     """Negative of portfolio return.
 
     Args:
@@ -132,7 +134,7 @@ def obj_neg_rtrn(x, params_obj):
         params_obj (dict): {'RETURN': negative of return vector (numpy.array), 'NUM_VAR': int}.
 
     Returns:
-        value (double): negative of portfolio return.
+        value (float): negative of portfolio return.
     """
 
     if params_obj is None:
@@ -148,7 +150,7 @@ def obj_neg_rtrn(x, params_obj):
     return sum([-a * b for a, b in zip(x, rtrn)])
 
 
-def obj_neg_sharpe_ratio(x, params_obj):
+def obj_neg_sharpe_ratio(x: List[float], params_obj: Dict[str, object]) -> float:
     """Negative of the Sharpe ratio.
 
     Args:
@@ -156,7 +158,7 @@ def obj_neg_sharpe_ratio(x, params_obj):
         params_obj (dict): {'Q': covar matrix (numpy.ndarray), 'p': returns (numpy.ndarray), 'bmk': benchmark return (float)}.
 
     Returns:
-        value (double): value of the function.
+        value (float): value of the function.
     """
     if params_obj is None:
         raise ValueError('Input params is None')
@@ -176,7 +178,7 @@ def obj_neg_sharpe_ratio(x, params_obj):
     return value
 
 
-def obj_qp(x, params_obj):
+def obj_qp(x: List[float], params_obj: Dict[str, object]) -> float:
     """Objective function for quadratic programming (minimization).
 
     Args:
@@ -184,7 +186,7 @@ def obj_qp(x, params_obj):
         params_obj (dict): {'Q': covariance matrix (cvxopt.matrix), 'p': negative of returns (cvxopt.matrix)}.
 
     Returns:
-        value (double): value of the function.
+        value (float): value of the function.
     """
     if params_obj is None:
         raise ValueError('Input params is None')
@@ -201,7 +203,7 @@ def obj_qp(x, params_obj):
     return value
 
 
-def obj_risk(x, params_obj):
+def obj_risk(x: List[float], params_obj: Dict[str, object]) -> float:
     """Objective function for risk.
 
     Args:
@@ -209,7 +211,7 @@ def obj_risk(x, params_obj):
         params_obj (dict): {'COVAR': covariance matrix (numpy.ndarray)}.
 
     Returns:
-        risk (double): risk of a portfolio.
+        risk (float): risk of a portfolio.
     """
     if params_obj is None:
         raise Exception('Input objective parameters are None')
@@ -225,7 +227,7 @@ def obj_risk(x, params_obj):
     return risk
 
 
-def obj_risk_parity(x, params_obj):
+def obj_risk_parity(x: List[float], params_obj: Dict[str, object]) -> float:
     """Objective function for risk parity optimization: https://en.wikipedia.org/wiki/Risk_parity.
 
         Args:
@@ -233,7 +235,7 @@ def obj_risk_parity(x, params_obj):
             params_obj (dict): {'COVAR': covariance matrix (numpy.ndarray)}.
 
         Returns:
-            risk_parity (double): risk parity value of a portfolio.
+            risk_parity (float): risk parity value of a portfolio.
         """
     if params_obj is None:
         raise Exception('Input objective parameters are None')
@@ -253,7 +255,7 @@ def obj_risk_parity(x, params_obj):
     return risk_parity
 
 
-def util_covar_to_corr_matrix(covar_matrix):
+def util_covar_to_corr_matrix(covar_matrix: pd.DataFrame) -> pd.DataFrame:
     """convert a covar matrix to a correlation matrix.
 
     Args:
@@ -279,7 +281,7 @@ def util_covar_to_corr_matrix(covar_matrix):
     return corr_matrix
 
 
-def util_is_valid_covar(covar_matrix):
+def util_is_valid_covar(covar_matrix: pd.DataFrame) -> tuple:
     """validate if a matrix is a valid covar matrix (symmetric and positive definite).
 
     Args:
@@ -315,7 +317,7 @@ def util_is_valid_covar(covar_matrix):
     return valid, None
 
 
-def util_md_Qn(x):
+def util_md_Qn(x: float) -> float:
     """Qn function used in maximum drawdown."""
     if x < 0:
         raise ValueError('Input argument x of util_md_Qn must be non-negative')
@@ -351,7 +353,7 @@ def util_md_Qn(x):
     raise RuntimeError('Calculation is not caught by logic')
 
 
-def util_md_Qp(x):
+def util_md_Qp(x: float) -> float:
     """Qp function used in maximum drawdown."""
     if x < 0:
         raise ValueError('Input argument x of util_md_Qp must be non-negative')

@@ -77,7 +77,12 @@ def process_input_output(dao, uuid):
     input_file_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), uuid + '_input.xlsx')
     output_file_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), uuid + '_output.xlsx')
 
-    sec_id_list_input, returns_input, covar_input, objectives_input, constr_df = Dao.read_excel_input(input_file_path)
+    if 'cn' in uuid:
+        sec_id_list_input, returns_input, covar_input, objectives_input, constr_df = Dao.read_excel_input_cn(input_file_path)
+    elif 'en' in uuid:
+        sec_id_list_input, returns_input, covar_input, objectives_input, constr_df = Dao.read_excel_input_en(input_file_path)
+    else:
+        sec_id_list_input, returns_input, covar_input, objectives_input, constr_df = Dao.read_excel_input_en(input_file_path)
 
     print("\n----- INPUT -----\n")
     print(constr_df)
@@ -95,8 +100,11 @@ def process_input_output(dao, uuid):
                                              objective,
                                              param=objectives_input.get(objective))
         result.reset_index(inplace=True)
-        result.columns = [Constants.en_to_cn.get(x) for x in result.columns]
-        results[Constants.en_to_cn.get(objective)] = result
+        if 'cn' in uuid:
+            result.columns = [Constants.en_to_cn.get(x) for x in result.columns]
+            results[Constants.en_to_cn.get(objective)] = result
+        else:
+            results[objective] = result
 
         summary.append(analytics)
 
@@ -105,11 +113,15 @@ def process_input_output(dao, uuid):
 
     summary = pd.concat(summary)
     summary.reset_index(inplace=True, drop=True)
-    summary['OBJECTIVE'] = [Constants.en_to_cn.get(x) for x in summary['OBJECTIVE']]
-    summary['ANALYTICS'] = [Constants.en_to_cn.get(x) for x in summary['ANALYTICS']]
-    summary.columns = [Constants.en_to_cn.get(x) for x in summary.columns]
+    if 'cn' in uuid:
+        summary['OBJECTIVE'] = [Constants.en_to_cn.get(x) for x in summary['OBJECTIVE']]
+        summary['ANALYTICS'] = [Constants.en_to_cn.get(x) for x in summary['ANALYTICS']]
+        summary.columns = [Constants.en_to_cn.get(x) for x in summary.columns]
 
-    results['总结'] = summary
+    if 'cn' in uuid:
+        results['总结'] = summary
+    else:
+        results['Summary'] = summary
     print('\nSummary')
     print(summary)
 
@@ -124,16 +136,20 @@ if __name__ == '__main__':
         pd.set_option('display.width', 400)
         pd.set_option('display.max_columns', 20)
 
-        covar_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', 'covar_matrix.csv')
-        attributes_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', 'attributes_data.csv')
-        dao = Dao.init_from_default_data(covar_path=covar_path, attributes_path=attributes_path)
-
         # read inputs
-        all_uuid = ["template"]
+        #all_uuid = ["template_cn", "template_en", "template_yfinance"]
+        all_uuid = ["template_yfinance"]
         for uuid in all_uuid:
+            if "yfinance" in uuid:
+                covar_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', 'yfinance_covar_matrix.csv')
+                attributes_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', 'yfinance_attributes_data.csv')
+            else:
+                covar_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', 'covar_matrix.csv')
+                attributes_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data', 'attributes_data.csv')
+            dao = Dao.init_from_default_data(covar_path=covar_path, attributes_path=attributes_path)
             process_input_output(dao, uuid)
 
     except Exception as err:
         print('Main batch failed: ' + str(err))
-        print('尊敬的客户，现在无优化结果。请检查输入的表头是否与模板一直。输入数据中是否存在异常报错的值，是否输入绝对值或者忘带百分比%符号，或异常的限制参数等。请调整后重新输入。')
+        #print('尊敬的客户，现在无优化结果。请检查输入的表头是否与模板一直。输入数据中是否存在异常报错的值，是否输入绝对值或者忘带百分比%符号，或异常的限制参数等。请调整后重新输入。')
         print(traceback.format_exc())

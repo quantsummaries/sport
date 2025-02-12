@@ -1,5 +1,6 @@
 import math
 from numbers import Number
+from typing import Dict, List, Set
 
 import numpy as np
 import pandas as pd
@@ -11,7 +12,7 @@ from .security import Security
 class Portfolio:
     """A portfolio class that carries a list of Security objects and their covariance and weights."""
 
-    def __init__(self, weights, securities, covar_matrix):
+    def __init__(self, weights: Dict[str, float], securities: List[Security], covar_matrix: pd.DataFrame):
         """Construct a Portfolio object by securities and their covariance and weights.
 
         Args:
@@ -73,7 +74,7 @@ class Portfolio:
 
         self._corr_matrix = util_covar_to_corr_matrix(self._covar_matrix)
 
-    def get_attr_names(self):
+    def get_attr_names(self) -> Set[str]:
         """Get the names of all the attributes in this Portfolio object.
 
         Returns:
@@ -85,13 +86,13 @@ class Portfolio:
 
         return attr_names
 
-    def get_attr_value(self, attr_name, sec_ids=None):
+    def get_attr_value(self, attr_name: str, sec_ids: List[str] = None) -> float:
         """Get portfolio level attributes, which is the weighted sum of security level attributes; non-numeric value is
         set to None.
 
         Args:
             attr_name (str): attribute name.
-
+            sec_ids (list): a list of security IDs.
         Returns:
             value (float): the weighted sum of security level attribute values.
         """
@@ -112,14 +113,14 @@ class Portfolio:
 
         return result
 
-    def get_avg_max_drawdown(self, num_days, sec_ids=None):
+    def get_avg_max_drawdown(self, num_days: int, sec_ids: List[str] = None) -> float:
         """Get portfolio level average maximum drawdown.
 
         Args:
             num_days (int): number of trading days.
             sec_ids (list): a selection of the assets; all if None
         Returns:
-            avg_max_drawdown (double): average maximum drawdown.
+            avg_max_drawdown (float): average maximum drawdown.
         """
         if sec_ids is None:
             sec_ids = self._sec_id_list
@@ -137,14 +138,14 @@ class Portfolio:
 
         return obj_avg_max_drawdown(wts, params)
 
-    def get_contr_to_risk(self, sec_id):
+    def get_contr_to_risk(self, sec_id: str) -> float:
         """Get the contribution to risk of a single security: https://en.wikipedia.org/wiki/Risk_parity.
 
         Args:
             sec_id (string): security ID.
 
         Returns:
-            ctr (double): contribution to risk.
+            ctr (float): contribution to risk.
         """
         covar = self._covar_matrix.to_numpy().astype(np.double)
         wts = np.array([self._weights.get(sec_id) for sec_id in self._sec_id_list])
@@ -155,7 +156,7 @@ class Portfolio:
 
         return ctr
 
-    def get_covar_matrix(self, sec_id_list=None):
+    def get_covar_matrix(self, sec_id_list: List[str] = None) -> pd.DataFrame:
         """Get the covariance matrix of a list of securities.
 
         Args:
@@ -173,7 +174,7 @@ class Portfolio:
 
         return self._covar_matrix.loc[sec_id_list, sec_id_list]
 
-    def get_id_list(self):
+    def get_id_list(self) -> List[str]:
         """Get the security IDs of this portfolio.
 
         Returns:
@@ -181,7 +182,7 @@ class Portfolio:
         """
         return self._sec_id_list
 
-    def get_risk(self, sec_ids=None):
+    def get_risk(self, sec_ids: List[str] = None) -> float:
         """Calculate the risk of a sub-portfolio.
 
         Args:
@@ -207,12 +208,14 @@ class Portfolio:
 
         return risk
 
-    def get_sharpe_ratio(self, bmk, sec_ids=None):
+    def get_sharpe_ratio(self, bmk: float, sec_ids: List[str] = None) -> float:
         """Calculate the Sharpe ratio of the portfolio.
 
         Args:
             bmk (float): benchmark rate.
-            sec_ids (list): a selection of the assets; all if None
+            sec_ids (list): a selection of the assets; all if None.
+        Returns:
+            sharpe_ratio (float): Sharpe ratio.
         """
         if sec_ids is None:
             sec_ids = self._sec_id_list
@@ -230,7 +233,7 @@ class Portfolio:
 
         return -obj_neg_sharpe_ratio(x, params)
 
-    def get_security(self, sec_id):
+    def get_security(self, sec_id: str) -> Security:
         """Get a Security object based on security ID.
 
         Args:
@@ -244,7 +247,7 @@ class Portfolio:
 
         return self._securities.get(sec_id)
 
-    def get_securities(self):
+    def get_securities(self) -> List[Security]:
         """Get securities in this Portfolio object.
 
         Returns:
@@ -252,7 +255,7 @@ class Portfolio:
         """
         return [self._securities.get(sec_id) for sec_id in self._sec_id_list]
 
-    def get_weights_dataframe(self, sec_ids=None, num_sig_digits=3):
+    def get_weights_dataframe(self, sec_ids: List[str] = None, num_sig_digits: int = 3) -> pd.DataFrame:
         """Get security weights in a data frame by security IDs.
 
         Args:
@@ -269,7 +272,7 @@ class Portfolio:
 
         return pd.DataFrame.from_dict({'SEC_ID': sec_ids, 'WEIGHT': wts})
 
-    def get_weights_dict(self, sec_ids=None):
+    def get_weights_dict(self, sec_ids: List[str] = None) -> Dict[str, float]:
         """Get security weights in a dictionary by security IDs.
 
         Args:
@@ -287,7 +290,7 @@ class Portfolio:
 
         return {sec_id: self._weights.get(sec_id) for sec_id in sec_ids}
 
-    def get_weights_list(self, sec_ids=None):
+    def get_weights_list(self, sec_ids: List[str] = None) -> List[float]:
         """Get security weights in a list by security IDs.
 
         Args:
@@ -305,7 +308,7 @@ class Portfolio:
 
         return [self._weights.get(sec_id) for sec_id in sec_ids]
 
-    def report(self, obj_type, obj_param, addtl=None):
+    def report(self, obj_type, obj_param: str, addtl: List[str] = None) -> tuple:
         """Report the portfolio for various optimization objects.
 
         Args:
@@ -408,7 +411,7 @@ class Portfolio:
 
         return pd.concat(df_list).set_index(keys=['SEC_ID'], drop=True), port_analytics
 
-    def reproduce_by_attr(self, attr_name, attr_values):
+    def reproduce_by_attr(self, attr_name: str, attr_values: Dict[str, float]) -> "Portfolio":
         """Reproduce a Portfolio object by updating its attributes.
 
         Args:
@@ -432,7 +435,7 @@ class Portfolio:
 
         return ptf
 
-    def reproduce_by_covar(self, covar_matrix):
+    def reproduce_by_covar(self, covar_matrix: pd.DataFrame) -> "Portfolio":
         """Reproduce a Portfolio object by updating the covariance matrix.
 
         Args:
@@ -461,7 +464,7 @@ class Portfolio:
 
         return ptf
 
-    def reproduce_by_merge(self, new_sec_id, sec_ids_to_merge):
+    def reproduce_by_merge(self, new_sec_id: str, sec_ids_to_merge: List[str]) -> "Portfolio":
         """Reproduce a Portfolio object by merging some of its constituents.
 
         Args:
@@ -529,7 +532,7 @@ class Portfolio:
 
         return Portfolio(weights=new_wts, securities=new_secs, covar_matrix=new_covar_matrix)
 
-    def reproduce_by_wts(self, wts):
+    def reproduce_by_wts(self, wts: List[float]) -> "Portfolio":
         """Reproduce a Portfolio object by updating the weights.
 
         Args:
@@ -551,9 +554,11 @@ class Portfolio:
 
         return ptf
 
-    def to_dataframe(self, corr=True):
+    def to_dataframe(self, corr: bool = True) -> pd.DataFrame:
         """Convert a Portfolio object to a data frame.
 
+        Args:
+            corr (bool): if True, return correlation matrix; return covariance matrix otherwise.
         Returns:
             df (pandas.DataFrame): a data frame with columns 'weight', 'SEC_ID', 'attr_name1', 'attr_name2', ...
         """

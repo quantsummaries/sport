@@ -1,5 +1,6 @@
 import math
 import os
+from typing import Dict, List
 
 import pandas as pd
 
@@ -8,7 +9,7 @@ class CovarEstimator:
     """Estimator of covariance matrix and average returns of assets."""
 
     @staticmethod
-    def _calc_rtrns(price, method):
+    def _calc_rtrns(price: List[float], method: str) -> List[float]:
         """Calculate price returns.
 
         Args:
@@ -34,7 +35,7 @@ class CovarEstimator:
         return rtrns
 
     @staticmethod
-    def _preprocess_data(data_dir):
+    def _preprocess_data(data_dir: str) -> tuple:
         """Collect price data and other data.
 
         Args:
@@ -51,6 +52,8 @@ class CovarEstimator:
         sec_id_to_last_data = dict()
         for root, dirs, files in os.walk(data_dir):
             for file in files:
+                if "csv" not in file:
+                    continue
                 data = pd.read_csv(os.path.join(root, file),
                                    dtype={'DATE': 'str',
                                           'SEC_ID': 'str',
@@ -98,7 +101,7 @@ class CovarEstimator:
 
         return sec_id_to_last_data, sec_id_to_price
 
-    def __init__(self, data_dir, rtrn_method, halflife_in_yrs):
+    def __init__(self, data_dir: str, rtrn_method: str, halflife_in_yrs: float, cash_rtrn: float = None) -> None:
         """
         Args:
             data_dir (str): a directory which holds all the security price data.
@@ -174,10 +177,11 @@ class CovarEstimator:
             self._risks[sec_id] = math.sqrt(self._covar_matrix.loc[sec_id, sec_id])
 
         # add CASH as a stand-alone asset
-        self._sec_id_list.append('000000')
-        self._sec_id_to_last_data['000000'] = {'SEC_NM': '现金'}
-        self._avg_rtrns['000000'] = 0.0035
-        self._risks['000000'] = 0.0
+        if cash_rtrn is not None:
+            self._sec_id_list.append('000000')
+            self._sec_id_to_last_data['000000'] = {'SEC_NM': 'CASH'}
+            self._avg_rtrns['000000'] = cash_rtrn
+            self._risks['000000'] = 0.0
 
         new_columns = list(self._covar_matrix.columns)
         new_columns.append('000000')
@@ -187,7 +191,7 @@ class CovarEstimator:
         self._covar_matrix = pd.concat([self._covar_matrix, cash_dataframe])
         self._covar_matrix['000000'] = [0.0] * self._covar_matrix.shape[0]
 
-    def get_avg_rtrns(self):
+    def get_avg_rtrns(self) -> Dict:
         """Return a dictionary of average resturns.
 
         Returns:
@@ -195,7 +199,7 @@ class CovarEstimator:
         """
         return self._avg_rtrns.copy()
 
-    def get_covar_matrix(self):
+    def get_covar_matrix(self) -> pd.DataFrame:
         """Return a data frame of covar matrix.
 
         Returns:
@@ -203,7 +207,7 @@ class CovarEstimator:
         """
         return self._covar_matrix.copy()
 
-    def get_risk(self):
+    def get_risk(self) -> Dict[str, float]:
         """Return a dictionary of risk.
 
         Returns:
@@ -211,7 +215,7 @@ class CovarEstimator:
         """
         return self._risks.copy()
 
-    def to_dataframe(self):
+    def to_dataframe(self) -> pd.DataFrame:
         """Return a data frame of return, risk, and covariance matrix, with sec_id as the index.
 
         Returns:

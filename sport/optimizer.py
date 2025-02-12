@@ -1,14 +1,18 @@
+from typing import List
+
 from cvxopt import solvers
 import numpy as np
 from scipy.optimize import minimize
 
 from sport.functions import obj_neg_rtrn
+from .objective import Objective
+from .constraint import Constraint
 
 
 class Optimizer:
     """Optimization calculator."""
 
-    def __init__(self, x0, obj, constr):
+    def __init__(self, x0: List, obj: Objective, constr: Constraint) -> None:
         """
         Args:
             x0 (list): initial guess.
@@ -26,7 +30,7 @@ class Optimizer:
         self._obj = obj
         self._constr = constr
 
-    def optimize(self, method):
+    def optimize(self, method: str) -> List:
         """Compute the optimized unknown variables.
 
         Args:
@@ -50,7 +54,7 @@ class Optimizer:
 
         return result
 
-    def _opt_cvxopt_solvers_qp(self):
+    def _opt_cvxopt_solvers_qp(self) -> List:
         """Optimize by cvxopt.solvers.qp.
 
         Returns:
@@ -73,7 +77,7 @@ class Optimizer:
 
         return list(sol['x'])
 
-    def _opt_scipy_optimize_minimize_trust_constr(self):
+    def _opt_scipy_optimize_minimize_trust_constr(self) -> List:
         """Optimize by scipy.optimize.minimize, method 'trust-constr'.
 
         Returns:

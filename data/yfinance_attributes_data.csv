@@ -1,0 +1,14 @@
+SEC_ID,IND_CD,IND_NM,SEC_NM,DIV_YLD
+AGG,BOND,BOND,iShares Core US Aggregate Bond,
+BND,BOND,BOND,Vanguard Total Bond Market,
+DBC,COMMODITY,COMMODITY,PowerShares DB Commodity Tracking,
+GSG,COMMODITY,COMMODITY,iShares S&P GSCI Commodity-Indexed Trust,
+JNK,BOND,BOND,SPDR Barclays High YIeld Bond,
+SPY,STOCK,STOCK,SP 500,
+TIP,BOND,BOND,iShares TIPS Bond,
+VBR,STOCK,STOCK,Vanguard Small-Cap Value,
+VNQ,REALESTATE,REALESTATE,Vanguard U.S. Real Estate REIT,
+VTI,STOCK,STOCK,Vanguard Total U.S. Stock,
+VTV,STOCK,STOCK,Vanguard Value ETF,
+VWO,STOCK,STOCK,Vanguard FTSE Emerging Markets,
+000000,CASH,CASH,CASH
