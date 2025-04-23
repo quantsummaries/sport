@@ -6,9 +6,9 @@ It incorporates several optimization packages (scipy.optimize, cvxopt). It provi
 
 ## How to Run
 1. Run batch_download_data.py to download daily price data to the data folder.
-2. In the data folder, run shell scripts clean_data.sh and change_headers.sh to clean up data.
+2. In the data folder, run the shell script clean_yfinance_data.sh to clean up data.
 3. Run btach_port_covar.py to load daily price data obtained in Step 1, and then generate covariance and correlation matrices.
-4. Manually update attributes_data.csv to generate sector information.
+4. Manually update the SEC_NM column of data/etf_covar_matrix.csv to enrich output information (if not updated, code will run without issue).
 5. Manually update template_input.xlsx to generate inputs.
 6. Run batch_port_main.py to generate optimal weights for various objectives and constraints.
 
