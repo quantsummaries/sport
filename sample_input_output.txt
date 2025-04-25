@@ -4,7 +4,7 @@ Run batch_port_main.py will obtain the following output for the ETF portfolio:
 
              TYPE           SEC_ID         ATTRIBUTE ATTRIBUTE_PARAMS       VALUE
 0     LINEAR_INEQ             EACH            WEIGHT              NaN  [0.0:0.15]
-1     LINEAR_INEQ      VNQ+GSG+DBC            WEIGHT              NaN   [0.0:0.2]
+1     LINEAR_INEQ  VNQ+GSG+DBC+GLD            WEIGHT              NaN   [0.0:0.2]
 2     LINEAR_INEQ  AGG+BND+JNK+TIP            WEIGHT              NaN   [0.0:0.3]
 3  NONLINEAR_INEQ              ALL              RISK              NaN  [0.0:0.35]
 4  NONLINEAR_INEQ              ALL  AVG_MAX_DRAWDOWN             20.0  [0.0:0.09]
@@ -18,30 +18,32 @@ MEAN_VARIANCE
 0     AGG            iShares Core US Aggregate Bond        BOND  0.0000  0.0355  0.0609
 1     BND                Vanguard Total Bond Market        BOND  0.0000  0.0336  0.0604
 2     DBC         PowerShares DB Commodity Tracking   COMMODITY  0.0000  0.0636  0.1694
-3     GSG  iShares S&P GSCI Commodity-Indexed Trust   COMMODITY  0.0711  0.0800  0.1981
+3     GSG  iShares S&P GSCI Commodity-Indexed Trust   COMMODITY  0.0000  0.0800  0.1981
 4     JNK             SPDR Barclays High YIeld Bond        BOND  0.1500  0.0831  0.0746
 5     SPY                                    SP 500       STOCK  0.1500  0.1963  0.1899
-6     TIP                         iShares TIPS Bond        BOND  0.0000  0.0434  0.0586
-7     VBR                  Vanguard Small-Cap Value       STOCK  0.0500  0.1348  0.2128
-8     VNQ            Vanguard U.S. Real Estate REIT  REALESTATE  0.1289  0.1215  0.2003
+6     TIP                         iShares TIPS Bond        BOND  0.1363  0.0434  0.0586
+7     VBR                  Vanguard Small-Cap Value       STOCK  0.0000  0.1348  0.2128
+8     VNQ            Vanguard U.S. Real Estate REIT  REALESTATE  0.0000  0.1215  0.2003
 9     VTI                 Vanguard Total U.S. Stock       STOCK  0.1500  0.1927  0.1915
 10    VTV                        Vanguard Value ETF       STOCK  0.1500  0.1656  0.1548
-11    VWO            Vanguard FTSE Emerging Markets       STOCK  0.1500  0.1287  0.1804
+11    VWO            Vanguard FTSE Emerging Markets       STOCK  0.1137  0.1287  0.1804
+12    GLD                          SPDR Gold Shares   COMMODITY  0.1500  0.2000  0.1519
 
 MAX_SHARPE_RATIO
    SEC_ID                                    SEC_NM      IND_NM  WEIGHT  RETURN    RISK  SHARPE_RATIO
-0     AGG            iShares Core US Aggregate Bond        BOND  0.0000  0.0355  0.0609        0.6908
-1     BND                Vanguard Total Bond Market        BOND  0.0000  0.0336  0.0604        0.6662
-2     DBC         PowerShares DB Commodity Tracking   COMMODITY  0.0031  0.0636  0.1694        0.4547
-3     GSG  iShares S&P GSCI Commodity-Indexed Trust   COMMODITY  0.1500  0.0800  0.1981        0.5244
-4     JNK             SPDR Barclays High YIeld Bond        BOND  0.1500  0.0831  0.0746        1.9794
-5     SPY                                    SP 500       STOCK  0.1500  0.1963  0.1899        1.5549
-6     TIP                         iShares TIPS Bond        BOND  0.1500  0.0434  0.0586        1.0396
-7     VBR                  Vanguard Small-Cap Value       STOCK  0.0000  0.1348  0.2128        0.8508
-8     VNQ            Vanguard U.S. Real Estate REIT  REALESTATE  0.0469  0.1215  0.2003        0.7662
-9     VTI                 Vanguard Total U.S. Stock       STOCK  0.1500  0.1927  0.1915        1.4926
-10    VTV                        Vanguard Value ETF       STOCK  0.1500  0.1656  0.1548        1.5673
-11    VWO            Vanguard FTSE Emerging Markets       STOCK  0.0500  0.1287  0.1804        0.8749
+0     AGG            iShares Core US Aggregate Bond        BOND    0.15  0.0355  0.0609        0.5831
+1     BND                Vanguard Total Bond Market        BOND    0.00  0.0336  0.0604        0.5567
+2     DBC         PowerShares DB Commodity Tracking   COMMODITY    0.00  0.0636  0.1694        0.3753
+3     GSG  iShares S&P GSCI Commodity-Indexed Trust   COMMODITY    0.05  0.0800  0.1981        0.4037
+4     JNK             SPDR Barclays High YIeld Bond        BOND    0.00  0.0831  0.0746        1.1136
+5     SPY                                    SP 500       STOCK    0.15  0.1963  0.1899        1.0338
+6     TIP                         iShares TIPS Bond        BOND    0.15  0.0434  0.0586        0.7401
+7     VBR                  Vanguard Small-Cap Value       STOCK    0.00  0.1348  0.2128        0.6334
+8     VNQ            Vanguard U.S. Real Estate REIT  REALESTATE    0.00  0.1215  0.2003        0.6064
+9     VTI                 Vanguard Total U.S. Stock       STOCK    0.15  0.1927  0.1915        1.0062
+10    VTV                        Vanguard Value ETF       STOCK    0.15  0.1656  0.1548        1.0700
+11    VWO            Vanguard FTSE Emerging Markets       STOCK    0.05  0.1287  0.1804        0.7134
+12    GLD                          SPDR Gold Shares   COMMODITY    0.15  0.2000  0.1519        1.3163
 
 MAX_RETURN
    SEC_ID                                    SEC_NM      IND_NM  WEIGHT  RETURN    RISK
@@ -49,85 +51,90 @@ MAX_RETURN
 1     BND                Vanguard Total Bond Market        BOND    0.00  0.0336  0.0604
 2     DBC         PowerShares DB Commodity Tracking   COMMODITY    0.00  0.0636  0.1694
 3     GSG  iShares S&P GSCI Commodity-Indexed Trust   COMMODITY    0.00  0.0800  0.1981
-4     JNK             SPDR Barclays High YIeld Bond        BOND    0.10  0.0831  0.0746
+4     JNK             SPDR Barclays High YIeld Bond        BOND    0.05  0.0831  0.0746
 5     SPY                                    SP 500       STOCK    0.15  0.1963  0.1899
 6     TIP                         iShares TIPS Bond        BOND    0.00  0.0434  0.0586
 7     VBR                  Vanguard Small-Cap Value       STOCK    0.15  0.1348  0.2128
-8     VNQ            Vanguard U.S. Real Estate REIT  REALESTATE    0.15  0.1215  0.2003
+8     VNQ            Vanguard U.S. Real Estate REIT  REALESTATE    0.05  0.1215  0.2003
 9     VTI                 Vanguard Total U.S. Stock       STOCK    0.15  0.1927  0.1915
 10    VTV                        Vanguard Value ETF       STOCK    0.15  0.1656  0.1548
 11    VWO            Vanguard FTSE Emerging Markets       STOCK    0.15  0.1287  0.1804
+12    GLD                          SPDR Gold Shares   COMMODITY    0.15  0.2000  0.1519
 
 MIN_RISK
    SEC_ID                                    SEC_NM      IND_NM  WEIGHT  RETURN    RISK
-0     AGG            iShares Core US Aggregate Bond        BOND  0.0655  0.0355  0.0609
+0     AGG            iShares Core US Aggregate Bond        BOND  0.0472  0.0355  0.0609
 1     BND                Vanguard Total Bond Market        BOND  0.1500  0.0336  0.0604
-2     DBC         PowerShares DB Commodity Tracking   COMMODITY  0.1500  0.0636  0.1694
-3     GSG  iShares S&P GSCI Commodity-Indexed Trust   COMMODITY  0.0500  0.0800  0.1981
+2     DBC         PowerShares DB Commodity Tracking   COMMODITY  0.0500  0.0636  0.1694
+3     GSG  iShares S&P GSCI Commodity-Indexed Trust   COMMODITY  0.0000  0.0800  0.1981
 4     JNK             SPDR Barclays High YIeld Bond        BOND  0.0000  0.0831  0.0746
 5     SPY                                    SP 500       STOCK  0.1500  0.1963  0.1899
-6     TIP                         iShares TIPS Bond        BOND  0.0845  0.0434  0.0586
+6     TIP                         iShares TIPS Bond        BOND  0.1028  0.0434  0.0586
 7     VBR                  Vanguard Small-Cap Value       STOCK  0.0000  0.1348  0.2128
 8     VNQ            Vanguard U.S. Real Estate REIT  REALESTATE  0.0000  0.1215  0.2003
-9     VTI                 Vanguard Total U.S. Stock       STOCK  0.1125  0.1927  0.1915
+9     VTI                 Vanguard Total U.S. Stock       STOCK  0.0500  0.1927  0.1915
 10    VTV                        Vanguard Value ETF       STOCK  0.1500  0.1656  0.1548
-11    VWO            Vanguard FTSE Emerging Markets       STOCK  0.0875  0.1287  0.1804
+11    VWO            Vanguard FTSE Emerging Markets       STOCK  0.1500  0.1287  0.1804
+12    GLD                          SPDR Gold Shares   COMMODITY  0.1500  0.2000  0.1519
 
 RISK_PARITY
    SEC_ID                                    SEC_NM      IND_NM  WEIGHT  RETURN    RISK     CTR
-0     AGG            iShares Core US Aggregate Bond        BOND  0.1007  0.0355  0.0609  0.0023
-1     BND                Vanguard Total Bond Market        BOND  0.1029  0.0336  0.0604  0.0023
-2     DBC         PowerShares DB Commodity Tracking   COMMODITY  0.0675  0.0636  0.1694  0.0034
-3     GSG  iShares S&P GSCI Commodity-Indexed Trust   COMMODITY  0.0557  0.0800  0.1981  0.0028
+0     AGG            iShares Core US Aggregate Bond        BOND  0.1020  0.0355  0.0609  0.0025
+1     BND                Vanguard Total Bond Market        BOND  0.1085  0.0336  0.0604  0.0026
+2     DBC         PowerShares DB Commodity Tracking   COMMODITY  0.0330  0.0636  0.1694  0.0027
+3     GSG  iShares S&P GSCI Commodity-Indexed Trust   COMMODITY  0.0000  0.0800  0.1981  0.0000
 4     JNK             SPDR Barclays High YIeld Bond        BOND  0.0000  0.0831  0.0746  0.0000
-5     SPY                                    SP 500       STOCK  0.0990  0.1963  0.1899  0.0103
-6     TIP                         iShares TIPS Bond        BOND  0.0964  0.0434  0.0586  0.0019
-7     VBR                  Vanguard Small-Cap Value       STOCK  0.0471  0.1348  0.2128  0.0062
-8     VNQ            Vanguard U.S. Real Estate REIT  REALESTATE  0.0768  0.1215  0.2003  0.0083
-9     VTI                 Vanguard Total U.S. Stock       STOCK  0.0837  0.1927  0.1915  0.0092
-10    VTV                        Vanguard Value ETF       STOCK  0.1500  0.1656  0.1548  0.0132
-11    VWO            Vanguard FTSE Emerging Markets       STOCK  0.1202  0.1287  0.1804  0.0133
+5     SPY                                    SP 500       STOCK  0.0753  0.1963  0.1899  0.0125
+6     TIP                         iShares TIPS Bond        BOND  0.0894  0.0434  0.0586  0.0021
+7     VBR                  Vanguard Small-Cap Value       STOCK  0.0566  0.1348  0.2128  0.0102
+8     VNQ            Vanguard U.S. Real Estate REIT  REALESTATE  0.0170  0.1215  0.2003  0.0026
+9     VTI                 Vanguard Total U.S. Stock       STOCK  0.0680  0.1927  0.1915  0.0115
+10    VTV                        Vanguard Value ETF       STOCK  0.1500  0.1656  0.1548  0.0201
+11    VWO            Vanguard FTSE Emerging Markets       STOCK  0.1500  0.1287  0.1804  0.0225
+12    GLD                          SPDR Gold Shares   COMMODITY  0.1500  0.2000  0.1519  0.0118
 
 MIN_AVG_MAX_DRAWDOWN
    SEC_ID                                    SEC_NM      IND_NM  WEIGHT  RETURN    RISK  AVG_MAX_DRAWDOWN
-0     AGG            iShares Core US Aggregate Bond        BOND  0.1500  0.0355  0.0609            0.0173
-1     BND                Vanguard Total Bond Market        BOND  0.0000  0.0336  0.0604            0.0173
-2     DBC         PowerShares DB Commodity Tracking   COMMODITY  0.1121  0.0636  0.1694            0.0474
-3     GSG  iShares S&P GSCI Commodity-Indexed Trust   COMMODITY  0.0866  0.0800  0.1981            0.0515
-4     JNK             SPDR Barclays High YIeld Bond        BOND  0.0000  0.0831  0.0746            0.0123
-5     SPY                                    SP 500       STOCK  0.1500  0.1963  0.1899            0.0389
-6     TIP                         iShares TIPS Bond        BOND  0.1500  0.0434  0.0586            0.0136
-7     VBR                  Vanguard Small-Cap Value       STOCK  0.0000  0.1348  0.2128            0.0520
-8     VNQ            Vanguard U.S. Real Estate REIT  REALESTATE  0.0013  0.1215  0.2003            0.0529
-9     VTI                 Vanguard Total U.S. Stock       STOCK  0.1461  0.1927  0.1915            0.0401
-10    VTV                        Vanguard Value ETF       STOCK  0.1500  0.1656  0.1548            0.0326
-11    VWO            Vanguard FTSE Emerging Markets       STOCK  0.0539  0.1287  0.1804            0.0481
+0     AGG            iShares Core US Aggregate Bond        BOND  0.0004  0.0355  0.0609            0.0205
+1     BND                Vanguard Total Bond Market        BOND  0.1500  0.0336  0.0604            0.0203
+2     DBC         PowerShares DB Commodity Tracking   COMMODITY  0.0500  0.0636  0.1694            0.0622
+3     GSG  iShares S&P GSCI Commodity-Indexed Trust   COMMODITY  0.0000  0.0800  0.1981            0.0699
+4     JNK             SPDR Barclays High YIeld Bond        BOND  0.0000  0.0831  0.0746            0.0240
+5     SPY                                    SP 500       STOCK  0.1500  0.1963  0.1899            0.0615
+6     TIP                         iShares TIPS Bond        BOND  0.1496  0.0434  0.0586            0.0194
+7     VBR                  Vanguard Small-Cap Value       STOCK  0.0000  0.1348  0.2128            0.0721
+8     VNQ            Vanguard U.S. Real Estate REIT  REALESTATE  0.0000  0.1215  0.2003            0.0672
+9     VTI                 Vanguard Total U.S. Stock       STOCK  0.0500  0.1927  0.1915            0.0619
+10    VTV                        Vanguard Value ETF       STOCK  0.1500  0.1656  0.1548            0.0513
+11    VWO            Vanguard FTSE Emerging Markets       STOCK  0.1500  0.1287  0.1804            0.0599
+12    GLD                          SPDR Gold Shares   COMMODITY  0.1500  0.2000  0.1519            0.0478
 
 Summary
            OBJECTIVE             ANALYTICS   VALUE
-0      MEAN_VARIANCE                RETURN   0.143
-1      MEAN_VARIANCE                  RISK  0.0926
+0      MEAN_VARIANCE                RETURN  0.1462
+1      MEAN_VARIANCE                  RISK  0.1132
 2      MEAN_VARIANCE              RISK_TOL     3.0
-3      MEAN_VARIANCE  20D_AVG_MAX_DRAWDOWN  0.0286
+3      MEAN_VARIANCE  20D_AVG_MAX_DRAWDOWN  0.0357
 4
-5   MAX_SHARPE_RATIO                RETURN  0.1265
-6   MAX_SHARPE_RATIO                  RISK  0.0734
-7   MAX_SHARPE_RATIO          SHARPE_RATIO  1.7237
+5   MAX_SHARPE_RATIO                RETURN  0.1355
+6   MAX_SHARPE_RATIO                  RISK  0.1029
+7   MAX_SHARPE_RATIO          SHARPE_RATIO  1.3163
 8   MAX_SHARPE_RATIO      BENCHMARK_RETURN     0.0
-9   MAX_SHARPE_RATIO  20D_AVG_MAX_DRAWDOWN  0.0221
+9   MAX_SHARPE_RATIO  20D_AVG_MAX_DRAWDOWN  0.0324
 10
-11        MAX_RETURN                RETURN  0.1492
-12        MAX_RETURN                  RISK  0.1056
-13        MAX_RETURN  20D_AVG_MAX_DRAWDOWN  0.0337
+11        MAX_RETURN                RETURN  0.1629
+12        MAX_RETURN                  RISK  0.1462
+13        MAX_RETURN  20D_AVG_MAX_DRAWDOWN   0.047
 14
-15          MIN_RISK                RETURN  0.1118
-16          MIN_RISK                  RISK  0.0697
-17          MIN_RISK  20D_AVG_MAX_DRAWDOWN  0.0214
+15          MIN_RISK                RETURN  0.1276
+16          MIN_RISK                  RISK  0.0994
+17          MIN_RISK  20D_AVG_MAX_DRAWDOWN  0.0313
 18
-19       RISK_PARITY                RETURN  0.1115
-20       RISK_PARITY                  RISK  0.0731
-21       RISK_PARITY  20D_AVG_MAX_DRAWDOWN  0.0226
+19       RISK_PARITY                RETURN   0.125
+20       RISK_PARITY                  RISK  0.1012
+21       RISK_PARITY  20D_AVG_MAX_DRAWDOWN  0.0321
 22
-23  AVG_MAX_DRAWDOWN                RETURN  0.1154
-24  AVG_MAX_DRAWDOWN                  RISK    0.07
-25  AVG_MAX_DRAWDOWN      AVG_MAX_DRAWDOWN  0.0213
+23  AVG_MAX_DRAWDOWN                RETURN  0.1279
+24  AVG_MAX_DRAWDOWN                  RISK  0.0994
+25  AVG_MAX_DRAWDOWN      AVG_MAX_DRAWDOWN  0.0313
+26

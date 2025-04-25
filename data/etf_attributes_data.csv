@@ -2,6 +2,7 @@ SEC_ID,IND_CD,IND_NM,SEC_NM,DIV_YLD
 AGG,BOND,BOND,iShares Core US Aggregate Bond,
 BND,BOND,BOND,Vanguard Total Bond Market,
 DBC,COMMODITY,COMMODITY,PowerShares DB Commodity Tracking,
+GLD,COMMODITY,COMMODITY,SPDR Gold Shares,
 GSG,COMMODITY,COMMODITY,iShares S&P GSCI Commodity-Indexed Trust,
 JNK,BOND,BOND,SPDR Barclays High YIeld Bond,
 SPY,STOCK,STOCK,SP 500,
