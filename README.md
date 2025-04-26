@@ -9,8 +9,9 @@ It incorporates several optimization packages (scipy.optimize, cvxopt). It provi
 2. In the data folder, run the shell script clean_yfinance_data.sh to clean up data.
 3. Run btach_port_covar.py to load daily price data obtained in Step 1, and then generate covariance and correlation matrices.
 4. Manually update the SEC_NM column of data/etf_covar_matrix.csv to enrich output information (if not updated, code will run without issue).
-5. Manually update template_input.xlsx to generate inputs.
-6. Run batch_port_main.py to generate optimal weights for various objectives and constraints.
+5. Manually update template_{cn,en,etf}_input.xlsx to generate inputs.
+6. Run batch_port_main.py to generate optimal weights for various objectives and constraints; output will be saved to template_{cn,en,etf}_output.xlsx.
+7. Run risk_analysis.ipynb for interactive risk analysis of any portfolio. View risk_analysis.html for the result.
 
 ## TODO
 

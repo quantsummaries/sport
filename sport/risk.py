@@ -18,7 +18,7 @@ def drawdown(rtrns: List[float], type: str) -> pd.DataFrame:
         rtrns (List[float]): a time series of returns.
         type (str): return type, 'simple' or 'log'.
     Returns:
-        drawdown (pd.DataFrame): a dataframe of 'cum_rtrn', 'max_cum_rtrn', and 'drawdown'.
+        drawdown (pd.DataFrame): a dataframe of three columns, 'cum_rtrn', 'max_cum_rtrn', and 'drawdown'.
     """
     if rtrns is None or not isinstance(rtrns, list) or len(rtrns) == 0:
         raise ValueError("input returns are not valid")
@@ -121,7 +121,7 @@ def calc_port_rtrns(rtrns, weights) -> pd.DataFrame:
         rtrns (pandas.DataFrame): a dataframe of returns, each column is the returns of a ticker.
         weights (Dict[str, float]): a dictionary of weights, {ticker: weight, ...}.
     Returns:
-        port_rtrns (pandas.DataFrame): a dataframe of returns, columns include portfolio returns and individual returns.
+        port_rtrns (pandas.DataFrame): a dataframe of returns, columns include portfolio returns ('Portfolio') and individual returns.
     """
     if rtrns is None or not isinstance(rtrns, pd.DataFrame) or rtrns.shape[0] == 0:
         raise ValueError("Input rtrns is not valid")
@@ -140,14 +140,17 @@ def calc_port_rtrns(rtrns, weights) -> pd.DataFrame:
     return port_rtrns
 
 
-def find_rolling_rtrns(data_dir: str, ticker: str, start_dt: datetime.date) -> pd.DataFrame:
-    """
+def find_rolling_rtrns(data_dir: str, ticker: str, start_dt: datetime.date, step_tenor: int, span_tenor: int) -> pd.DataFrame:
+    """ Calculate returns in rolling windows. E.g. [t1, t1+span], [t2, t2+span], etc.
     Args:
-        data_dir (str):
-        ticker (str):
-        start_dt (datetime.date):
+        data_dir (str): data directory.
+        ticker (str): security ID.
+        start_dt (datetime.date): start date of the rolling.
+        step_tenor (int): step size of moving in number of days.
+        span_tenor (int): span of rolling window in number of days.
     Returns:
-        rolling_rtrns (pd.DataFrame):
+        rolling_rtrns (pd.DataFrame): data frame of returns during non-overlapping rolling windows, with 5 columns,
+        'StartIdx', 'StartDate', 'EndIdx', 'EndDate', and 'Return'.
     """
     if data_dir is None or not isinstance(data_dir, str) or not os.path.exists(data_dir):
         raise ValueError(f"""Input data_dir is not valid: {data_dir}""")
@@ -165,26 +168,30 @@ def find_rolling_rtrns(data_dir: str, ticker: str, start_dt: datetime.date) -> p
         raise ValueError(f"""data file {filepath} is empty""")
 
     df['DATE'] = [datetime.datetime.strptime(x, "%Y-%m-%d").date() for x in df['DATE']]
-    if df.loc[0, 'DATE'] >= start_dt:
-        raise ValueError(f"""Input start_dt {start_dt} is not later than the first date in data {df.loc[0, 'DATE']}""")
+    if start_dt < df['DATE'].iloc[0]:
+        raise ValueError(f"""Input start_dt {start_dt} is before the first 'DATE' of input data: {df['DATE'].iloc[0]} """)
 
     # start the roll by tenor
-    tenor = datetime.timedelta(days=30)
+    step= datetime.timedelta(days=step_tenor)
+    span = datetime.timedelta(days=span_tenor)
     period_start_dates = list()
     period_start_idx = list()
     period_end_dates = list()
     period_end_idx = list()
     rtrns = list()
     flag = True
-    dt1 = None
-    dt2 = start_dt
-    while dt2 <= df['DATE'].iloc[-1]:
-        idx1 = df['DATE'].searchsorted(dt2)
+    dt1 = start_dt
+    dt2 = None
+    while flag:
+        # need to consider the case where dt1 and dt2 are not business days
+        idx1 = df['DATE'].searchsorted(dt1)
         dt1 = df.loc[idx1, 'DATE']
-        dt2 = dt1 + tenor
+
+        dt2 = dt1 + span
         if dt2 > df['DATE'].iloc[-1]:
             break
         idx2 = df['DATE'].searchsorted(dt2)
+        dt2 = df.loc[idx2, 'DATE']
 
         period_start_idx.append(idx1)
         period_end_idx.append(idx2)
@@ -194,18 +201,32 @@ def find_rolling_rtrns(data_dir: str, ticker: str, start_dt: datetime.date) -> p
         r = math.log(df.loc[idx2, 'CLOSE']) - math.log(df.loc[idx1, 'CLOSE'])
         rtrns.append(r)
 
-    rolling_rtrns = pd.DataFrame({'StartIdx': period_start_idx,
-                                  'StartDate': period_start_dates,
-                                  'EndIdx': period_end_idx,
-                                  'EndDate': period_end_dates,
-                                  'Return': rtrns})
+        dt1 = dt1 + step
+
+    if len(rtrns) > 0:
+        rolling_rtrns = pd.DataFrame({'StartIdx': period_start_idx,
+                                      'StartDate': period_start_dates,
+                                      'EndIdx': period_end_idx,
+                                      'EndDate': period_end_dates,
+                                      'Return': rtrns})
+    else:
+        rolling_rtrns = pd.DataFrame()
 
     return rolling_rtrns
 
 
 def calc_tail_risk_from_price(df: pd.DataFrame, period_start_dates: List[datetime.date], period_end_dates: List[datetime.date]) -> float:
     """
+    Given lists of pairing period start dates and period end dates, calculate the return over each [period start date, period end date]
+    and average all the calculated returns.
 
+    Args:
+        df (pandas.DataFrame): data frame that contains column 'DATE' and 'CLOSE'.
+        period_start_dates (List[datetime.date]): a list of period start dates.
+        period_end_dates (List[datetime.date]): a list of period end dates.
+
+    Returns:
+        tail_risk (float): tail risk as the mean of calculated returns.
     """
     if df is None or not isinstance(df, pd.DataFrame) or df.shape[0] == 0 or 'DATE' not in df.columns or 'CLOSE' not in df.columns:
         raise ValueError("Input df is not valid")
@@ -234,7 +255,16 @@ def calc_tail_risk_from_price(df: pd.DataFrame, period_start_dates: List[datetim
 
 def calc_tail_risk_from_rtrn(df: pd.DataFrame, period_start_dates: List[datetime.date], period_end_dates: List[datetime.date]) -> float:
     """
+    Given lists of pairing period start dates and period end dates, locate the return over each [period start date, period end date]
+    and average all the located returns.
 
+    Args:
+        df (pandas.DataFrame): data frame that contains column 'DATE' and 'Return'.
+        period_start_dates (List[datetime.date]): a list of period start dates.
+        period_end_dates (List[datetime.date]): a list of period end dates.
+
+    Returns:
+        tail_risk (float): tail risk as the mean of located returns.
     """
     if df is None or not isinstance(df, pd.DataFrame) or df.shape[0] == 0 or 'DATE' not in df.columns or 'Return' not in df.columns:
         raise ValueError("Input df is not valid")
@@ -367,11 +397,12 @@ if __name__ == '__main__':
         data_dir = os.path.join(os.getcwd(), '..', 'data', 'etf')
         output_dir = os.path.join(os.getcwd(), '..', 'output')
 
-        #drawdown_analysis(data_dir=data_dir, output_dir=output_dir)
+        drawdown_analysis(data_dir=data_dir, output_dir=output_dir)
 
         rolling_rtrns = find_rolling_rtrns(data_dir=data_dir,
                                            ticker="SPY",
-                                           start_dt=datetime.date(2005, 1, 4))
+                                           start_dt=datetime.date(2005, 1, 4),
+                                           num_days=30)
 
         tail_pct = 0.05,
         threshold = rolling_rtrns['Return'].quantile(tail_pct)
