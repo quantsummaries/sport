@@ -5,3 +5,4 @@ test/test_output/
 test/__pycache__/
 docs/*.png
 output/
+sandbox/

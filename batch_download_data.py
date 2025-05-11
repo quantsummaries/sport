@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
         for ticker in security_list:
             #df = yf.download(ticker, period=period, interval=interval)
-            df = yf.download(ticker, start="2005-01-01", end="2025-04-24")
+            df = yf.download(ticker, start="2005-01-01", end="2025-05-09", auto_adjust=False)
             df['SEC_ID'] = ticker
             print(df.head())
             df.to_csv(os.path.join(data_dir, ticker + '.csv'))

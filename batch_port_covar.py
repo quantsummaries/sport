@@ -31,7 +31,7 @@ if __name__ == '__main__':
                                          rtrn_method='logarithm',
                                          halflife_in_yrs=1.0,
                                          cash_rtrn=0.0,
-                                         price_type='CLOSE',
+                                         price_type='Adj CLOSE',
                                          sec_id_list=['SPY', 'VTV', 'VBR', 'VTI', 'VWO', 'BND', 'AGG', 'JNK', 'TIP', 'VNQ', 'GSG', 'DBC', 'GLD'],
                                          start_dt=datetime.date(2007, 12, 11),
                                          end_dt=datetime.date(2025, 2, 11))
